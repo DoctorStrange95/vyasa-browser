@@ -1,0 +1,27 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+alembic
+asyncpg
+aiosqlite
+httpx
+beautifulsoup4
+lxml
+requests
+pandas
+scipy
+statsmodels
+openpyxl
+python-multipart
+anthropic
+python-dotenv
+pydantic[email]
+elasticsearch
+aiohttp
+python-docx
+passlib[bcrypt]
+python-jose[cryptography]
+# Burden data scraping
+aiofiles
+# PDF text extraction
+pypdf
