@@ -1,6 +1,6 @@
-# HealthScholar
+# vyasa-browser
 
-HealthScholar is an AI-powered health research platform built as a monorepo with a FastAPI backend and a Next.js frontend.
+vyasa-browser is an AI-powered health research platform built as a monorepo with a FastAPI backend and a Next.js frontend.
 
 ## Repository structure
 
