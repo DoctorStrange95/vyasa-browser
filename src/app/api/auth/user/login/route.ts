@@ -54,37 +54,42 @@ export async function POST(req: NextRequest) {
   let rows: Record<string, unknown>[];
   let resolvedEmail: string;
 
-  if (isPhone) {
-    const phone = normalizePhone(raw);
-    if (phone.length !== 10) {
-      return NextResponse.json({ error: "Enter a valid 10-digit mobile number." }, { status: 400 });
+  try {
+    if (isPhone) {
+      const phone = normalizePhone(raw);
+      if (phone.length !== 10) {
+        return NextResponse.json({ error: "Enter a valid 10-digit mobile number." }, { status: 400 });
+      }
+      rows = await adminQuery("users", "phone", phone, 1);
+      if (!rows.length) {
+        return NextResponse.json({ error: "No account found with this phone number." }, { status: 404 });
+      }
+      resolvedEmail = String(rows[0].email ?? "");
+    } else {
+      resolvedEmail = raw.toLowerCase();
+      rows = await adminQuery("users", "email", resolvedEmail, 1);
+      if (!rows.length) {
+        return NextResponse.json({ error: "No account found with this email." }, { status: 404 });
+      }
     }
-    rows = await adminQuery("users", "phone", phone, 1);
-    if (!rows.length) {
-      return NextResponse.json({ error: "No account found with this phone number." }, { status: 404 });
+
+    const user = rows[0];
+    const { ok, needsUpgrade } = await verifyPassword(password, String(user.passwordHash ?? ""));
+    if (!ok) {
+      return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
     }
-    resolvedEmail = String(rows[0].email ?? "");
-  } else {
-    resolvedEmail = raw.toLowerCase();
-    rows = await adminQuery("users", "email", resolvedEmail, 1);
-    if (!rows.length) {
-      return NextResponse.json({ error: "No account found with this email." }, { status: 404 });
-    }
+
+    if (needsUpgrade) upgradeHash(String(user._id), password);
+
+    const token = await signUserToken({ uid: String(user._id), name: String(user.name), email: resolvedEmail });
+    const res   = NextResponse.json({ success: true, name: user.name, email: resolvedEmail });
+    res.cookies.set(USER_COOKIE, token, {
+      httpOnly: true, secure: process.env.NODE_ENV === "production",
+      sameSite: "lax", maxAge: 60 * 60 * 24 * 30, path: "/",
+    });
+    return res;
+  } catch (e: unknown) {
+    console.error("Login error:", e);
+    return NextResponse.json({ error: "Service temporarily unavailable. Please try again shortly." }, { status: 503 });
   }
-
-  const user = rows[0];
-  const { ok, needsUpgrade } = await verifyPassword(password, String(user.passwordHash ?? ""));
-  if (!ok) {
-    return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
-  }
-
-  if (needsUpgrade) upgradeHash(String(user._id), password);
-
-  const token = await signUserToken({ uid: String(user._id), name: String(user.name), email: resolvedEmail });
-  const res   = NextResponse.json({ success: true, name: user.name, email: resolvedEmail });
-  res.cookies.set(USER_COOKIE, token, {
-    httpOnly: true, secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", maxAge: 60 * 60 * 24 * 30, path: "/",
-  });
-  return res;
 }
