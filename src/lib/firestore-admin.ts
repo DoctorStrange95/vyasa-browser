@@ -10,13 +10,30 @@ import { getFirestore, Firestore } from "firebase-admin/firestore";
 let _app: App | null = null;
 let _db: Firestore | null = null;
 
-function getAdminDb(): Firestore {
-  if (_db) return _db;
+function buildCredentialFromEnv(): Record<string, unknown> {
+  // Option 1: individual env vars (preferred — set when rotating the key)
+  const clientEmail = process.env.CLIENT_EMAIL ?? process.env.FIREBASE_CLIENT_EMAIL ?? "";
+  const privateKey  = process.env.PRIVATE_KEY  ?? process.env.FIREBASE_PRIVATE_KEY  ?? "";
+  if (clientEmail && privateKey) {
+    return {
+      type:                        process.env.TYPE ?? "service_account",
+      project_id:                  process.env.PROJECT_ID ?? process.env.FIREBASE_PROJECT_ID ?? "",
+      private_key_id:              process.env.PRIVATE_KEY_ID ?? "",
+      private_key:                 privateKey.replace(/\\n/g, "\n"),
+      client_email:                clientEmail,
+      client_id:                   process.env.CLIENT_ID ?? "",
+      auth_uri:                    process.env.AUTH_URI ?? "https://accounts.google.com/o/oauth2/auth",
+      token_uri:                   process.env.TOKEN_URI ?? "https://oauth2.googleapis.com/token",
+      auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL ?? "https://www.googleapis.com/oauth2/v1/certs",
+      client_x509_cert_url:        process.env.CLIENT_X509_CERT_URL ?? "",
+      universe_domain:             process.env.UNIVERSE_DOMAIN ?? "googleapis.com",
+    };
+  }
 
+  // Option 2: legacy single JSON blob
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT_KEY ?? "";
-  if (!raw) throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY is not set. Get it from Firebase Console → Project Settings → Service Accounts → Generate new private key.");
+  if (!raw) throw new Error("Firebase credentials not configured. Set CLIENT_EMAIL + PRIVATE_KEY or FIREBASE_SERVICE_ACCOUNT_KEY.");
 
-  // Support plain JSON string or base64-encoded JSON
   let parsed: Record<string, unknown>;
   try {
     parsed = JSON.parse(raw);
@@ -24,14 +41,19 @@ function getAdminDb(): Firestore {
     try {
       parsed = JSON.parse(Buffer.from(raw, "base64").toString("utf8"));
     } catch {
-      throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY must be a valid JSON string or base64-encoded JSON.");
+      throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY must be valid JSON or base64-encoded JSON.");
     }
   }
-
-  // Vercel env vars double-escape \n as \\n — fix the private key so JWT signing works
   if (typeof parsed.private_key === "string") {
     parsed.private_key = parsed.private_key.replace(/\\n/g, "\n");
   }
+  return parsed;
+}
+
+function getAdminDb(): Firestore {
+  if (_db) return _db;
+
+  const parsed = buildCredentialFromEnv();
 
   const existingApps = getApps();
   if (existingApps.length === 0) {
