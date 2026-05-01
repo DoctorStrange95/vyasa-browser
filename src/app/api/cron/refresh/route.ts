@@ -120,22 +120,29 @@ export async function GET(req: Request) {
     };
     await writeCacheSafe(PHI_DEFAULT, PHI_TMP, JSON.stringify(payload, null, 2));
 
-    // Save new items to Firestore ph_intelligence for admin review
-    // Skip any item already in Firestore (any status/age) to avoid resetting reviewed items
+    // Save genuinely new items to ph_intelligence for admin review.
+    // ID includes sourceUrl so each unique article URL gets its own slot,
+    // preventing false-dedup collisions across articles with similar titles.
     const { adminList, getAdminDb } = await import("@/lib/firestore-admin");
     const existing    = await adminList("ph_intelligence", 2000);
-    const existingIds = new Set(existing.map(d => d._id));
-    const db = getAdminDb();
+    const existingIds = new Set(existing.map(d => String(d._id)));
+    const db          = getAdminDb();
+    const scrapedAt   = new Date().toISOString();
     let saved = 0;
     await Promise.allSettled(
       result.items.slice(0, 80).map(async (item) => {
         try {
-          const raw = `${item.type}::${item.disease ?? item.program ?? ""}::${item.location.state}::${item.title.slice(0, 40)}`;
+          const urlPart = item.sourceUrl
+            ? item.sourceUrl.replace(/[^a-zA-Z0-9]/g, "").slice(-40)
+            : item.title.slice(40, 80);
+          const raw = `${item.type}::${item.disease ?? item.program ?? ""}::${item.location.state}::${item.title.slice(0, 40)}::${urlPart}`;
           const id  = Buffer.from(raw).toString("base64").replace(/[/+=]/g, "_").slice(0, 100);
           if (!existingIds.has(id)) {
             await db.collection("ph_intelligence").doc(id).set({
               ...(item as unknown as Record<string, unknown>),
-              status: "pending", scrapedAt: new Date().toISOString(),
+              _id:       id,
+              status:    "pending",
+              scrapedAt,
             });
             saved++;
           }
