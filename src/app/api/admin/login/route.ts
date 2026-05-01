@@ -23,14 +23,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });
   }
 
-  const token = await signAdminToken();
-  const res = NextResponse.json({ ok: true });
-  res.cookies.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60 * 8,
-    path: "/",
-  });
-  return res;
+  try {
+    const token = await signAdminToken();
+    const res = NextResponse.json({ ok: true });
+    res.cookies.set(COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 8,
+      path: "/",
+    });
+    return res;
+  } catch (e: unknown) {
+    console.error("Admin login error:", e);
+    return NextResponse.json({ error: "Admin service misconfigured. Check ADMIN_JWT_SECRET env var." }, { status: 503 });
+  }
 }

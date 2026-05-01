@@ -19,7 +19,7 @@ function buildCredentialFromEnv(): Record<string, unknown> {
       type:                        process.env.TYPE ?? "service_account",
       project_id:                  process.env.PROJECT_ID ?? process.env.FIREBASE_PROJECT_ID ?? "",
       private_key_id:              process.env.PRIVATE_KEY_ID ?? "",
-      private_key:                 privateKey.replace(/\\n/g, "\n"),
+      private_key:                 privateKey.includes("\\n") ? privateKey.replace(/\\n/g, "\n") : privateKey,
       client_email:                clientEmail,
       client_id:                   process.env.CLIENT_ID ?? "",
       auth_uri:                    process.env.AUTH_URI ?? "https://accounts.google.com/o/oauth2/auth",
