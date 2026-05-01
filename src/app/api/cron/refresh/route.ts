@@ -138,8 +138,10 @@ export async function GET(req: Request) {
           const raw = `${item.type}::${item.disease ?? item.program ?? ""}::${item.location.state}::${item.title.slice(0, 40)}::${urlPart}`;
           const id  = Buffer.from(raw).toString("base64").replace(/[/+=]/g, "_").slice(0, 100);
           if (!existingIds.has(id)) {
+            // JSON round-trip strips undefined fields — Firestore rejects them
+            const clean = JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
             await db.collection("ph_intelligence").doc(id).set({
-              ...(item as unknown as Record<string, unknown>),
+              ...clean,
               _id:       id,
               status:    "pending",
               scrapedAt,

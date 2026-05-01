@@ -140,10 +140,13 @@ export async function POST(req: Request) {
             if (existingIds.has(id)) {
               skipped++;
             } else {
+              // JSON round-trip strips undefined fields — Firestore rejects them
+              const clean = JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
               await db.collection("ph_intelligence").doc(id).set({
-                ...(item as unknown as Record<string, unknown>),
+                ...clean,
                 _id: id,
-                status: "pending", scrapedAt: new Date().toISOString(),
+                status: "pending",
+                scrapedAt: new Date().toISOString(),
               });
               saved++;
             }
