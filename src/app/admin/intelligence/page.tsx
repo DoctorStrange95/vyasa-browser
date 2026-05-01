@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface PHItem {
   id: string;
-  type: "Outbreak" | "Program" | "Policy" | "Infrastructure";
+  type: "Outbreak" | "NCD" | "Program" | "Policy" | "Infrastructure";
   title: string;
   disease?: string;
   program?: string;
@@ -20,7 +20,7 @@ interface PHItem {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  Outbreak: "#ef4444", Program: "#0d9488", Policy: "#6366f1", Infrastructure: "#eab308",
+  Outbreak: "#ef4444", NCD: "#818cf8", Program: "#0d9488", Policy: "#6366f1", Infrastructure: "#eab308",
 };
 const CONF_COLORS: Record<string, string> = { High: "#4ade80", Medium: "#fb923c", Low: "#94a3b8" };
 
@@ -42,6 +42,7 @@ export default function IntelligenceAdmin() {
   const [acting, setActing] = useState<string | null>(null);
   const [noFirebase, setNoFirebase] = useState(false);
   const [approveAllLoading, setApproveAllLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string>("All");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -115,31 +116,45 @@ export default function IntelligenceAdmin() {
               {data && data.pending.length > 0 && (
                 <button onClick={approveAll} disabled={approveAllLoading}
                   style={{ backgroundColor: "#16a34a", color: "#fff", border: "none", borderRadius: "7px", padding: "0.55rem 1.25rem", fontSize: "0.82rem", fontWeight: 600, cursor: approveAllLoading ? "not-allowed" : "pointer", fontFamily: "inherit" }}>
-                  {approveAllLoading ? "Approving…" : `✓ Approve All (${data.pending.length})`}
+                  {approveAllLoading ? "Approving…" : `✓ Approve All (${activeFilter === "All" ? data.pending.length : data.pending.filter(i => i.type === activeFilter).length})`}
                 </button>
               )}
             </div>
 
-            {/* Stats bar — category breakdown + last scrape */}
+            {/* Filter tabs — category breakdown */}
             {data && data.pending.length > 0 && (() => {
               const breakdown = categoryBreakdown(data.pending);
               const lastAt    = lastScrapeTime(data.pending);
-              const catColors: Record<string, string> = { Outbreak: "#ef4444", NCD: "#818cf8", Program: "#0d9488", Policy: "#6366f1", Infrastructure: "#eab308" };
+              const allTypes  = ["All", ...Object.keys(breakdown)];
               return (
-                <div style={{ backgroundColor: "#0f2040", border: "1px solid #1e3a5f", borderRadius: "10px", padding: "0.9rem 1.25rem", marginBottom: "1.5rem", display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
-                  <div style={{ fontSize: "0.65rem", color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", marginRight: "0.25rem" }}>Category breakdown</div>
-                  {Object.entries(breakdown).map(([type, count]) => (
-                    <div key={type} style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
-                      <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: catColors[type] ?? "#64748b", flexShrink: 0 }} />
-                      <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>{type}</span>
-                      <span style={{ fontSize: "0.75rem", color: catColors[type] ?? "#94a3b8", fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700 }}>{count}</span>
-                    </div>
-                  ))}
-                  {lastAt && (
-                    <div style={{ marginLeft: "auto", fontSize: "0.65rem", color: "#334155", fontFamily: "'IBM Plex Mono', monospace" }}>
-                      Last scraped: {new Date(lastAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
-                    </div>
-                  )}
+                <div style={{ backgroundColor: "#0f2040", border: "1px solid #1e3a5f", borderRadius: "10px", padding: "0.75rem 1.25rem", marginBottom: "1.5rem" }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
+                    <span style={{ fontSize: "0.65rem", color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", marginRight: "0.25rem" }}>Filter</span>
+                    {allTypes.map(type => {
+                      const color  = TYPE_COLORS[type] ?? "#64748b";
+                      const active = activeFilter === type;
+                      const count  = type === "All" ? data.pending.length : (breakdown[type] ?? 0);
+                      return (
+                        <button key={type} onClick={() => setActiveFilter(type)}
+                          style={{
+                            display: "flex", alignItems: "center", gap: "0.35rem",
+                            backgroundColor: active ? `${color}20` : "transparent",
+                            border: `1px solid ${active ? color : "#1e3a5f"}`,
+                            borderRadius: "20px", padding: "0.25rem 0.75rem",
+                            cursor: "pointer", transition: "all 0.15s", fontFamily: "inherit",
+                          }}>
+                          <span style={{ width: 7, height: 7, borderRadius: "50%", backgroundColor: active ? color : "#475569", flexShrink: 0 }} />
+                          <span style={{ fontSize: "0.72rem", color: active ? color : "#94a3b8", fontWeight: active ? 700 : 400 }}>{type}</span>
+                          <span style={{ fontSize: "0.68rem", color: active ? color : "#475569", fontFamily: "'IBM Plex Mono', monospace" }}>{count}</span>
+                        </button>
+                      );
+                    })}
+                    {lastAt && (
+                      <span style={{ marginLeft: "auto", fontSize: "0.65rem", color: "#334155", fontFamily: "'IBM Plex Mono', monospace" }}>
+                        Last scraped: {new Date(lastAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
+                      </span>
+                    )}
+                  </div>
                 </div>
               );
             })()}
@@ -159,7 +174,9 @@ export default function IntelligenceAdmin() {
             )}
 
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              {data?.pending.map(item => (
+              {(data?.pending ?? [])
+                .filter(item => activeFilter === "All" || item.type === activeFilter)
+                .map(item => (
                 <div key={item.id} style={{ backgroundColor: "#0f2040", border: "1px solid #1e3a5f", borderRadius: "10px", padding: "1rem 1.25rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", alignItems: "center", marginBottom: "0.4rem" }}>
