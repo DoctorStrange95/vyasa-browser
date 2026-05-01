@@ -207,11 +207,10 @@ function makeItem(
   const combined = `${title} ${desc}`;
   const disease  = detectIDSPDisease(combined);
   const program  = detectIDSPProgram(combined);
-  const isHealth = /health|medical|hospital|vaccine|nutrition|sanitation|outbreak|epidemic|disease|infection|virus|bacteria|surveillance/.test(combined.toLowerCase());
-  if (!disease && !program && !isHealth) return null;
+  if (!disease && !program) return null;
 
   const loc    = extractLocation(combined);
-  const type   = disease ? "Outbreak" : program ? "Program" : "Policy";
+  const type: PHIntelligenceItem["type"]   = disease ? "Outbreak" : "Program";
   const cases  = extractNumber(combined, ["cases", "patients", "infected", "positive", "confirmed"]);
   const deaths = extractNumber(combined, ["deaths", "died", "fatalities", "killed"]);
   const date   = parseDateToISO(pubDate);
@@ -530,6 +529,101 @@ async function fetchWHONews(): Promise<PHIntelligenceItem[]> {
   return items.slice(0, 8);
 }
 
+// ── Source 10: WHO India + SEARO outbreak alerts ──────────────────────────────
+async function fetchWHOIndia(): Promise<PHIntelligenceItem[]> {
+  const items: PHIntelligenceItem[] = [];
+  const endpoints = [
+    { url: "https://www.searo.who.int/india/en/", src: "WHO India (SEARO)" },
+    { url: "https://www.who.int/southeastasia/outbreaks-and-emergencies", src: "WHO SEARO Outbreaks" },
+    { url: "https://www.who.int/india/news-releases", src: "WHO India News" },
+  ];
+  for (const { url, src } of endpoints) {
+    try {
+      const res = await fetch(url, {
+        headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+        next: { revalidate: 0 },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!res.ok) continue;
+      const html = await res.text();
+      const linkRE = /<a[^>]+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi;
+      let m: RegExpExecArray | null;
+      while ((m = linkRE.exec(html)) !== null && items.length < 10) {
+        const text = stripHtml(m[2]);
+        if (text.length < 20 || text.length > 320) continue;
+        const disease = detectIDSPDisease(text);
+        const program = detectIDSPProgram(text);
+        if (!disease && !program) continue;
+        const loc  = extractLocation(text);
+        const href = m[1];
+        items.push({
+          type: disease ? "Outbreak" : "Program",
+          category: "communicable",
+          title:    text.slice(0, 130),
+          disease:  disease || undefined,
+          program:  program || undefined,
+          location: loc,
+          summary:  text,
+          cases: "", deaths: "",
+          date:     new Date().toISOString().split("T")[0],
+          source:   src,
+          sourceUrl: href.startsWith("http") ? href : `https://www.who.int${href}`,
+          confidence: "High",
+        });
+      }
+    } catch { continue; }
+    if (items.length >= 8) break;
+  }
+  return items.slice(0, 10);
+}
+
+// ── Source 11: NCDC outbreak bulletin scraping ────────────────────────────────
+async function fetchNCDCOutbreaks(): Promise<PHIntelligenceItem[]> {
+  const items: PHIntelligenceItem[] = [];
+  const urls = [
+    { url: "https://ncdc.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3749", src: "NCDC Outbreak Alerts" },
+    { url: "https://ncdc.mohfw.gov.in/",                                               src: "NCDC (National Centre for Disease Control)" },
+  ];
+  for (const { url, src } of urls) {
+    try {
+      const res = await fetch(url, {
+        headers: { "User-Agent": "HealthForIndia/2.0" },
+        next: { revalidate: 0 },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!res.ok) continue;
+      const html = await res.text();
+      const linkRE = /<a[^>]+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi;
+      let m: RegExpExecArray | null;
+      while ((m = linkRE.exec(html)) !== null && items.length < 12) {
+        const text = stripHtml(m[2]);
+        if (text.length < 15 || text.length > 280) continue;
+        const disease = detectIDSPDisease(text);
+        const program = detectIDSPProgram(text);
+        if (!disease && !program) continue;
+        const loc = extractLocation(text);
+        const href = m[1];
+        items.push({
+          type: disease ? "Outbreak" : "Program",
+          category: "communicable",
+          title:    text.slice(0, 130),
+          disease:  disease || undefined,
+          program:  program || undefined,
+          location: loc,
+          summary:  text,
+          cases: "", deaths: "",
+          date:     new Date().toISOString().split("T")[0],
+          source:   src,
+          sourceUrl: href.startsWith("http") ? href : `https://ncdc.mohfw.gov.in${href}`,
+          confidence: "High",
+        });
+      }
+    } catch { continue; }
+    if (items.length >= 10) break;
+  }
+  return items.slice(0, 12);
+}
+
 // ── Deduplication ──────────────────────────────────────────────────────────────
 function dedup(items: PHIntelligenceItem[]): PHIntelligenceItem[] {
   const seen = new Set<string>();
@@ -560,12 +654,15 @@ export async function runIDSPAgent(): Promise<{
     fetchTheHinduHealth(),
     fetchIndianExpressHealth(),
     fetchWHONews(),
+    fetchWHOIndia(),
+    fetchNCDCOutbreaks(),
   ]);
 
   const labels = [
     "PIB", "MoHFW", "IDSP data.gov.in", "NHP/NCDC",
     "Google News", "Outbreak News Today",
     "The Hindu Health", "Indian Express Health", "WHO News",
+    "WHO India/SEARO", "NCDC Outbreaks",
   ];
 
   const all: PHIntelligenceItem[] = [];

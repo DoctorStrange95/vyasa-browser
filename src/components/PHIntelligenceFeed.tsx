@@ -491,7 +491,7 @@ export default function PHIntelligenceFeed({ maxItems }: { maxItems?: number } =
   const confOrder = (i: PHItem) =>
     i.confidence === "High" ? 0 : i.confidence === "Medium" ? 1 : 2;
 
-  const sortedItems = [...(data?.items ?? [])].sort((a, b) => {
+  const sortedItems = [...(data?.items ?? [])].filter(i => i.type !== "Policy").sort((a, b) => {
     const pd = priorityOrder(a) - priorityOrder(b);
     if (pd !== 0) return pd;
     return confOrder(a) - confOrder(b);

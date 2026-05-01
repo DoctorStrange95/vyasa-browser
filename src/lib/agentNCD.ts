@@ -214,10 +214,10 @@ function makeNCDItem(
   const combined = `${title} ${desc}`;
   const disease  = detectNCDDisease(combined);
   const program  = detectNCDProgram(combined);
-  if (!disease && !program && !NCD_HEALTH_KEYWORDS.test(combined.toLowerCase())) return null;
+  if (!disease && !program) return null;
 
   const loc    = extractLocation(combined);
-  const type: PHIntelligenceItem["type"] = disease ? "NCD" : program ? "Program" : "Policy";
+  const type: PHIntelligenceItem["type"] = disease ? "NCD" : "Program";
   const cases  = extractNumber(combined, ["cases", "patients", "diagnosed", "confirmed"]);
   const deaths = extractNumber(combined, ["deaths", "died", "fatalities", "mortality"]);
   const date   = pubDate ? (() => { try { return new Date(pubDate).toISOString().split("T")[0]; } catch { return new Date().toISOString().split("T")[0]; } })() : new Date().toISOString().split("T")[0];
@@ -408,7 +408,66 @@ async function fetchICMRWHONCD(): Promise<PHIntelligenceItem[]> {
   return items.slice(0, 10);
 }
 
-// ── Source 6: Indian Express Health RSS ──────────────────────────────────────
+// ── Source 6: WHO India NCD + ICMR NCD research ──────────────────────────────
+async function fetchWHOIndiaNCD(): Promise<PHIntelligenceItem[]> {
+  const items: PHIntelligenceItem[] = [];
+  const endpoints = [
+    { url: "https://www.who.int/india/news-releases",    src: "WHO India — NCD" },
+    { url: "https://www.who.int/india/activities",       src: "WHO India Activities" },
+    { url: "https://www.icmr.gov.in/",                   src: "ICMR" },
+    { url: "https://www.icmr.gov.in/ncd.html",           src: "ICMR NCD Division" },
+  ];
+  for (const { url, src } of endpoints) {
+    try {
+      const res = await fetch(url, {
+        headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+        next: { revalidate: 0 },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!res.ok) continue;
+      const html = await res.text();
+      const linkRE = /<a[^>]+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi;
+      let m: RegExpExecArray | null;
+      while ((m = linkRE.exec(html)) !== null && items.length < 10) {
+        const text = stripHtml(m[2]);
+        if (text.length < 20 || text.length > 320) continue;
+        const item = makeNCDItem(text, text, m[1].startsWith("http") ? m[1] : `https://www.who.int${m[1]}`, "", src, "High");
+        if (item) items.push(item);
+      }
+    } catch { continue; }
+    if (items.length >= 8) break;
+  }
+  return items.slice(0, 10);
+}
+
+// ── Source 7: The Hindu Health RSS ───────────────────────────────────────────
+async function fetchTheHinduNCD(): Promise<PHIntelligenceItem[]> {
+  const items: PHIntelligenceItem[] = [];
+  try {
+    const res = await fetch("https://www.thehindu.com/sci-tech/health/feeder/default.rss", {
+      headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+      next: { revalidate: 0 },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return items;
+    const xml = await res.text();
+    const itemRE = /<item>([\s\S]*?)<\/item>/gi;
+    let m: RegExpExecArray | null;
+    while ((m = itemRE.exec(xml)) !== null && items.length < 15) {
+      const b       = m[1];
+      const title   = stripHtml(b.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/)?.[1] ?? b.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "");
+      const desc    = stripHtml(b.match(/<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/)?.[1] ?? b.match(/<description>([\s\S]*?)<\/description>/)?.[1] ?? "");
+      const link    = (b.match(/<link>([\s\S]*?)<\/link>/)?.[1] ?? b.match(/<guid[^>]*>([\s\S]*?)<\/guid>/)?.[1] ?? "").trim();
+      const pubDate = b.match(/<pubDate>([\s\S]*?)<\/pubDate>/)?.[1] ?? "";
+      if (!title) continue;
+      const item = makeNCDItem(title, desc, link, pubDate, "The Hindu Health", "High");
+      if (item) items.push(item);
+    }
+  } catch { /* silent */ }
+  return items;
+}
+
+// ── Source 8: Indian Express Health RSS ──────────────────────────────────────
 async function fetchIndianExpressNCD(): Promise<PHIntelligenceItem[]> {
   const items: PHIntelligenceItem[] = [];
   try {
@@ -455,13 +514,15 @@ export async function runNCDAgent(): Promise<{
   const errors:  string[] = [];
   const sources: string[] = [];
 
-  const [pib, mohfw, dataGov, gnews, icmr, ieHealth] = await Promise.allSettled([
+  const [pib, mohfw, dataGov, gnews, icmr, ieHealth, whoIndia, theHindu] = await Promise.allSettled([
     fetchPIBNCD(),
     fetchMoHFWNCD(),
     fetchDataGovNCD(),
     fetchGoogleNewsNCD(),
     fetchICMRWHONCD(),
     fetchIndianExpressNCD(),
+    fetchWHOIndiaNCD(),
+    fetchTheHinduNCD(),
   ]);
 
   const all: PHIntelligenceItem[] = [];
@@ -475,12 +536,14 @@ export async function runNCDAgent(): Promise<{
     }
   };
 
-  add(pib,      "PIB NCD");
-  add(mohfw,    "MoHFW NCD");
-  add(dataGov,  "data.gov.in NCD");
-  add(gnews,    "Google News NCD");
-  add(icmr,     "ICMR/WHO India");
-  add(ieHealth, "Indian Express Health");
+  add(pib,       "PIB NCD");
+  add(mohfw,     "MoHFW NCD");
+  add(dataGov,   "data.gov.in NCD");
+  add(gnews,     "Google News NCD");
+  add(icmr,      "ICMR/WHO India");
+  add(ieHealth,  "Indian Express Health");
+  add(whoIndia,  "WHO India NCD");
+  add(theHindu,  "The Hindu Health");
 
   const sorted = dedup(all)
     .filter(item => ageDays(item.date ?? "") <= 30)
