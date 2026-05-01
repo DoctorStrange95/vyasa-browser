@@ -386,9 +386,9 @@ function ItemCard({ item, onSelect }: { item: PHItem; onSelect: () => void }) {
   );
 }
 
-// ── Session-level cache (prevents re-scraping on every page navigation) ───────
-const SESSION_KEY    = "ph_feed_v2";
-const SESSION_TTL_MS = 23 * 60 * 60 * 1000; // 23h — slightly under server TTL
+// ── Session-level cache (5-min TTL — public feed is now a fast Firestore read) ──
+const SESSION_KEY    = "ph_feed_v3";
+const SESSION_TTL_MS = 5 * 60 * 1000; // 5 min — approved items show within 5 min
 
 function getSessionCache(): FeedData | null {
   try {

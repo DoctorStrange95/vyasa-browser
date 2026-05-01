@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { adminQuery } from "@/lib/firestore-admin";
 
+export const dynamic = "force-dynamic";
+
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
