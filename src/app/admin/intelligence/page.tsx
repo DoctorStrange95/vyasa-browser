@@ -22,6 +22,16 @@ interface PHItem {
 const TYPE_COLORS: Record<string, string> = {
   Outbreak: "#ef4444", NCD: "#818cf8", Program: "#0d9488", Policy: "#6366f1", Infrastructure: "#eab308",
 };
+
+function cleanSummary(s: string): string {
+  return s
+    .replace(/[a-z]+\s+href="[^"]*"/gi, "")
+    .replace(/href="[^"]*"/gi, "")
+    .replace(/target="[^"]*"/gi, "")
+    .replace(/oc=\d+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 const CONF_COLORS: Record<string, string> = { High: "#4ade80", Medium: "#fb923c", Low: "#94a3b8" };
 
 function categoryBreakdown(items: PHItem[]) {
@@ -188,7 +198,7 @@ export default function IntelligenceAdmin() {
                       <span style={{ fontSize: "0.6rem", color: CONF_COLORS[item.confidence], marginLeft: "auto" }}>{item.confidence} confidence</span>
                     </div>
                     <div style={{ fontSize: "0.875rem", fontWeight: 600, color: "#e2e8f0", marginBottom: "0.3rem" }}>{item.title}</div>
-                    <div style={{ fontSize: "0.78rem", color: "#94a3b8", lineHeight: 1.5, marginBottom: "0.4rem" }}>{item.summary}</div>
+                    <div style={{ fontSize: "0.78rem", color: "#94a3b8", lineHeight: 1.5, marginBottom: "0.4rem" }}>{cleanSummary(item.summary)}</div>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", fontSize: "0.68rem", color: "#475569" }}>
                       {item.location.state && <span>📍 {item.location.state}{item.location.district ? `, ${item.location.district}` : ""}</span>}
                       {item.cases && <span style={{ color: "#fb923c" }}>Cases: {item.cases}</span>}

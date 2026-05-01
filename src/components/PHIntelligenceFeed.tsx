@@ -362,7 +362,7 @@ function ItemCard({ item, onSelect }: { item: PHItem; onSelect: () => void }) {
       </div>
 
       {/* Summary */}
-      <div style={{ fontSize: "0.8rem", color: "#94a3b8", lineHeight: 1.6 }}>{item.summary}</div>
+      <div style={{ fontSize: "0.8rem", color: "#94a3b8", lineHeight: 1.6 }}>{cleanSummary(item.summary)}</div>
 
       {/* Stats */}
       {(casesVal != null || deathsVal != null) && (
@@ -384,6 +384,16 @@ function ItemCard({ item, onSelect }: { item: PHItem; onSelect: () => void }) {
       </div>
     </div>
   );
+}
+
+function cleanSummary(s: string): string {
+  return s
+    .replace(/[a-z]+\s+href="[^"]*"/gi, "")
+    .replace(/href="[^"]*"/gi, "")
+    .replace(/target="[^"]*"/gi, "")
+    .replace(/oc=\d+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 // ── Session-level cache (5-min TTL — public feed is now a fast Firestore read) ──
