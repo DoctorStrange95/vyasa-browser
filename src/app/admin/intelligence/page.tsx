@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 
 interface PHItem {
-  id: string;
+  _id: string;
   type: "Outbreak" | "NCD" | "Program" | "Policy" | "Infrastructure";
   title: string;
   disease?: string;
@@ -187,7 +187,7 @@ export default function IntelligenceAdmin() {
               {(data?.pending ?? [])
                 .filter(item => activeFilter === "All" || item.type === activeFilter)
                 .map(item => (
-                <div key={item.id} style={{ backgroundColor: "#0f2040", border: "1px solid #1e3a5f", borderRadius: "10px", padding: "1rem 1.25rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+                <div key={item._id} style={{ backgroundColor: "#0f2040", border: "1px solid #1e3a5f", borderRadius: "10px", padding: "1rem 1.25rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", alignItems: "center", marginBottom: "0.4rem" }}>
                       <span style={{ fontSize: "0.65rem", fontWeight: 700, backgroundColor: `${TYPE_COLORS[item.type]}20`, border: `1px solid ${TYPE_COLORS[item.type]}50`, color: TYPE_COLORS[item.type], borderRadius: "4px", padding: "0.1rem 0.45rem", textTransform: "uppercase" }}>
@@ -208,12 +208,12 @@ export default function IntelligenceAdmin() {
                     </div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", flexShrink: 0 }}>
-                    <button onClick={() => act(item.id, "approve")} disabled={acting === item.id}
-                      style={{ backgroundColor: "#16a34a", color: "#fff", border: "none", borderRadius: "6px", padding: "0.4rem 1rem", fontSize: "0.78rem", fontWeight: 600, cursor: acting === item.id ? "not-allowed" : "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
-                      {acting === item.id ? "…" : "✓ Approve"}
+                    <button onClick={() => act(item._id, "approve")} disabled={acting === item._id}
+                      style={{ backgroundColor: "#16a34a", color: "#fff", border: "none", borderRadius: "6px", padding: "0.4rem 1rem", fontSize: "0.78rem", fontWeight: 600, cursor: acting === item._id ? "not-allowed" : "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                      {acting === item._id ? "…" : "✓ Approve"}
                     </button>
-                    <button onClick={() => act(item.id, "reject")} disabled={acting === item.id}
-                      style={{ backgroundColor: "transparent", color: "#ef4444", border: "1px solid #ef444440", borderRadius: "6px", padding: "0.4rem 1rem", fontSize: "0.78rem", fontWeight: 600, cursor: acting === item.id ? "not-allowed" : "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                    <button onClick={() => act(item._id, "reject")} disabled={acting === item._id}
+                      style={{ backgroundColor: "transparent", color: "#ef4444", border: "1px solid #ef444440", borderRadius: "6px", padding: "0.4rem 1rem", fontSize: "0.78rem", fontWeight: 600, cursor: acting === item._id ? "not-allowed" : "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
                       ✕ Reject
                     </button>
                   </div>
