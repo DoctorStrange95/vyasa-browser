@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback, useRef } from "react";
+import { fetchPHI } from "@/lib/phiCache";
 
 interface PHItem {
   type:      "Outbreak" | "NCD" | "Program" | "Policy" | "Infrastructure";
@@ -438,11 +439,7 @@ export default function PHIntelligenceFeed({ maxItems }: { maxItems?: number } =
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/ph-intelligence${refresh ? "?refresh=1" : ""}`,
-        { signal: AbortSignal.timeout(55000) }
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const d = await res.json() as FeedData;
+      const d = await fetchPHI(refresh) as FeedData;
       setData(d);
       setSessionCache(d);   // store so next navigation uses this
       setRefreshMsg(null);
@@ -454,11 +451,9 @@ export default function PHIntelligenceFeed({ maxItems }: { maxItems?: number } =
         pollRef.current = setInterval(async () => {
           attempts++;
           try {
-            const r = await fetch("/api/ph-intelligence");
-            if (r.ok) {
-              const d = await r.json() as FeedData;
-              setData(d);
-              setSessionCache(d);
+            const d = await fetchPHI() as FeedData;
+            setData(d);
+            setSessionCache(d);
               if (attempts >= 3 || !d.fromCache) {
                 clearInterval(pollRef.current!);
                 pollRef.current = null;

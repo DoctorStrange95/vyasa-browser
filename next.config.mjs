@@ -5,6 +5,18 @@ const nextConfig = {
     serverComponentsExternalPackages: ["firebase-admin", "google-auth-library", "xlsx", "web-push"],
   },
 
+  async redirects() {
+    return [
+      // Redirect www → non-www so canonical matches everywhere
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.vyasaa.com" }],
+        destination: "https://vyasaa.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

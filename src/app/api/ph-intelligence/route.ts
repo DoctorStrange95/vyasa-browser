@@ -19,13 +19,16 @@ export async function GET() {
       .filter(item => String(item.scrapedAt ?? item.date ?? "") >= cutoff)
       .sort((a, b) => String(b.scrapedAt ?? "").localeCompare(String(a.scrapedAt ?? "")));
 
-    return NextResponse.json({
-      items:       recent,
-      sources:     [],
-      errors:      [],
-      refreshedAt: new Date().toISOString(),
-      fromCache:   true,
-    });
+    return NextResponse.json(
+      {
+        items:       recent,
+        sources:     [],
+        errors:      [],
+        refreshedAt: new Date().toISOString(),
+        fromCache:   true,
+      },
+      { headers: { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" } },
+    );
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error("PH Intelligence feed error:", msg);

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { fetchPHI } from "@/lib/phiCache";
 
 interface PHItem {
   type: string;
@@ -20,8 +21,7 @@ export default function OutbreakAlerts() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    fetch("/api/ph-intelligence")
-      .then(r => r.json())
+    fetchPHI()
       .then(d => {
         const outbreaks: PHItem[] = (d.items ?? []).filter((i: PHItem) => i.type === "Outbreak");
         setItems(outbreaks.slice(0, 8));

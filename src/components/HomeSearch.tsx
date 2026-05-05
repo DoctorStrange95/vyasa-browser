@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import statesRaw from "@/data/states.json";
 import citiesRaw from "@/data/cities.json";
+import { fetchPHI } from "@/lib/phiCache";
 
 type StateEntry = typeof statesRaw[number];
 type CityEntry  = typeof citiesRaw[number];
@@ -120,10 +121,9 @@ export default function HomeSearch() {
       .finally(() => setLoadIdsp(false));
 
     setLoadPhi(true);
-    fetch("/api/ph-intelligence")
-      .then(r => r.json())
+    fetchPHI()
       .then(d => {
-        const all: PHIItem[] = d.items ?? d ?? [];
+        const all = (d.items ?? []) as PHIItem[];
         const filtered = all
           .filter(p => p.status === "live" && stateMatches(p.location?.state ?? "", stateName))
           .slice(0, 4);

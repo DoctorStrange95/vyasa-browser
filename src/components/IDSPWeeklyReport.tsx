@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { fetchPHI } from "@/lib/phiCache";
 import type { IDSPWeeklyMeta } from "@/app/api/idsp-weekly/route";
 import type { IDSPOutbreak } from "@/lib/idspPDFParser";
 
@@ -121,8 +122,7 @@ export default function IDSPWeeklyReport() {
       .then(d => { setData(d as IDSPWeeklyMeta); setLoading(false); })
       .catch(() => setLoading(false));
     // Also load PHI feed for cross-referencing
-    fetch("/api/ph-intelligence")
-      .then(r => r.json())
+    fetchPHI()
       .then(d => { if (Array.isArray(d?.items)) setPhiItems(d.items as PHIItem[]); })
       .catch(() => {});
   }, []);
