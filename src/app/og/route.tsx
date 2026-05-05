@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
               fontSize: 22, color: "#fff",
             }}>H</div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 18, fontWeight: 700, color: "#e2e8f0", lineHeight: 1.2 }}>HealthForIndia</span>
+              <span style={{ fontSize: 18, fontWeight: 700, color: "#e2e8f0", lineHeight: 1.2 }}>Vyasa</span>
               <span style={{ fontSize: 12, color: "#475569", letterSpacing: "0.05em" }}>BY VYASA</span>
             </div>
             {state && (

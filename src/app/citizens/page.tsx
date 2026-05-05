@@ -99,7 +99,7 @@ function AyushmanCardInfo() {
         <div style={{ marginTop: "0.85rem", background: "#0d1f3c", borderRadius: "8px", padding: "0.75rem 1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <span style={{ fontSize: "1rem" }}>🔔</span>
           <div style={{ fontSize: "0.78rem", color: "#64748b" }}>
-            <strong style={{ color: "#94a3b8" }}>HealthForIndia Helpline — Coming Soon.</strong> We&apos;re building a dedicated citizen helpline to guide you through the Ayushman card process in your local language.
+            <strong style={{ color: "#94a3b8" }}>Vyasa Helpline — Coming Soon.</strong> We&apos;re building a dedicated citizen helpline to guide you through the Ayushman card process in your local language.
           </div>
         </div>
       </div>

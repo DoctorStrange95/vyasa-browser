@@ -60,7 +60,7 @@ async function fetchArticleText(url: string): Promise<string> {
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; HealthForIndia/2.0; +https://healthforindia.in)",
+        "User-Agent": "Mozilla/5.0 (compatible; Vyasa/2.0; +https://healthforindia.in)",
         "Accept": "text/html,application/xhtml+xml",
       },
       signal: AbortSignal.timeout(6000),

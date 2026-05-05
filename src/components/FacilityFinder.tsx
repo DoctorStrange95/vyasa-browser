@@ -103,7 +103,7 @@ export default function FacilityFinder() {
         // GPS — reverse-geocode to get state name
         const geo = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`,
-          { headers: { "User-Agent": "HealthForIndia/2.0" } }
+          { headers: { "User-Agent": "Vyasa/2.0" } }
         ).then(r => r.json());
         rawState = geo?.address?.state ?? "";
       }

@@ -242,7 +242,7 @@ async function fetchPIBNCD(): Promise<PHIntelligenceItem[]> {
   try {
     const res = await fetch(
       "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
-      { headers: { "User-Agent": "HealthForIndia/2.0" }, redirect: "follow", next: { revalidate: 0 }, signal: AbortSignal.timeout(8000) }
+      { headers: { "User-Agent": "Vyasa/2.0" }, redirect: "follow", next: { revalidate: 0 }, signal: AbortSignal.timeout(8000) }
     );
     if (!res.ok) return items;
     const xml    = await res.text();
@@ -272,7 +272,7 @@ async function fetchMoHFWNCD(): Promise<PHIntelligenceItem[]> {
   for (const url of urls) {
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0" },
+        headers: { "User-Agent": "Vyasa/2.0" },
         next:    { revalidate: 0 },
         signal:  AbortSignal.timeout(8000),
       });
@@ -352,7 +352,7 @@ async function fetchGoogleNewsNCD(): Promise<PHIntelligenceItem[]> {
     try {
       const url = `https://news.google.com/rss/search?q=${q}&hl=en-IN&gl=IN&ceid=IN:en`;
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0" },
+        headers: { "User-Agent": "Vyasa/2.0" },
         next:    { revalidate: 0 },
         signal:  AbortSignal.timeout(8000),
       });
@@ -387,7 +387,7 @@ async function fetchICMRWHONCD(): Promise<PHIntelligenceItem[]> {
   for (const { url, src } of sources) {
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0" },
+        headers: { "User-Agent": "Vyasa/2.0" },
         next:    { revalidate: 0 },
         signal:  AbortSignal.timeout(8000),
       });
@@ -420,7 +420,7 @@ async function fetchWHOIndiaNCD(): Promise<PHIntelligenceItem[]> {
   for (const { url, src } of endpoints) {
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+        headers: { "User-Agent": "Vyasa/2.0 (+https://healthforindia.in)" },
         next: { revalidate: 0 },
         signal: AbortSignal.timeout(8000),
       });
@@ -445,7 +445,7 @@ async function fetchTheHinduNCD(): Promise<PHIntelligenceItem[]> {
   const items: PHIntelligenceItem[] = [];
   try {
     const res = await fetch("https://www.thehindu.com/sci-tech/health/feeder/default.rss", {
-      headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+      headers: { "User-Agent": "Vyasa/2.0 (+https://healthforindia.in)" },
       next: { revalidate: 0 },
       signal: AbortSignal.timeout(8000),
     });
@@ -472,7 +472,7 @@ async function fetchIndianExpressNCD(): Promise<PHIntelligenceItem[]> {
   const items: PHIntelligenceItem[] = [];
   try {
     const res = await fetch("https://indianexpress.com/section/health/feed/", {
-      headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+      headers: { "User-Agent": "Vyasa/2.0 (+https://healthforindia.in)" },
       next:    { revalidate: 0 },
       signal:  AbortSignal.timeout(8000),
     });

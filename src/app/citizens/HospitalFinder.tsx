@@ -180,7 +180,7 @@ export default function HospitalFinder({ isLoggedIn, prefilledState, onPrefilled
           const { latitude: lat, longitude: lon } = pos.coords;
           const geo = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=en`,
-            { headers: { "User-Agent": "HealthForIndia/2.0" } }
+            { headers: { "User-Agent": "Vyasa/2.0" } }
           ).then(r => r.json());
           const rawState    = geo?.address?.state ?? "";
           const rawDistrict = (geo?.address?.county ?? geo?.address?.state_district ?? "").replace(/\s+district$/i, "").trim();

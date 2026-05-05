@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How HealthForIndia by Vyasa collects, uses and protects your personal data.",
+  description: "How Vyasa collects, uses and protects your personal data.",
 };
 
 const EFFECTIVE = "1 April 2025";
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         </p>
 
         <Section title="1. Who we are">
-          <p>HealthForIndia is operated by <strong style={{ color: "#e2e8f0" }}>Vyasa Integrated Healthcare Private Limited</strong>, a company registered in India. We build tools that make public health data accessible to citizens, policymakers and researchers. This policy explains how we handle personal information when you use our platform at <em>healthforindia.vyasa.health</em> (the "Platform").</p>
+          <p>Vyasa is operated by <strong style={{ color: "#e2e8f0" }}>Vyasa Integrated Healthcare Private Limited</strong>, a company registered in India. We build tools that make public health data accessible to citizens, policymakers and researchers. This policy explains how we handle personal information when you use our platform at <em>healthforindia.vyasa.health</em> (the "Platform").</p>
         </Section>
 
         <Section title="2. Data we collect">
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="8. Children">
-          <p>HealthForIndia is not directed at children under 13. We do not knowingly collect personal data from children. If you believe a child has provided us data, contact us and we will delete it promptly.</p>
+          <p>Vyasa is not directed at children under 13. We do not knowingly collect personal data from children. If you believe a child has provided us data, contact us and we will delete it promptly.</p>
         </Section>
 
         <Section title="9. Changes to this policy">

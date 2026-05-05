@@ -2,7 +2,7 @@ import ContributeForm from "@/components/ContributeForm";
 import VyasaLogo from "@/components/VyasaLogo";
 import Link from "next/link";
 
-export const metadata = { title: "Contribute Data — HealthForIndia" };
+export const metadata = { title: "Contribute Data — Vyasa" };
 
 export default function ContributePage() {
   return (
@@ -11,7 +11,7 @@ export default function ContributePage() {
       <div style={{ backgroundColor: "#0a1628", borderBottom: "1px solid #1e3a5f", padding: "0 2rem", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none" }}>
           <VyasaLogo size={28} />
-          <span className="font-display" style={{ color: "#fff", fontWeight: 700, fontSize: "0.95rem" }}>HealthForIndia</span>
+          <span className="font-display" style={{ color: "#fff", fontWeight: 700, fontSize: "0.95rem" }}>Vyasa</span>
         </Link>
         <Link href="/" style={{ fontSize: "0.75rem", color: "#475569", textDecoration: "none" }}>← Back to map</Link>
       </div>

@@ -28,8 +28,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "HealthForIndia — India's Public Health Transparency Platform",
-    template: "%s | HealthForIndia",
+    default: "India's Public Health Transparency Platform",
+    template: "%s | Vyasa",
   },
   description:
     "District-level public health data for every Indian state and UT — infant mortality, vaccination coverage, disease outbreaks, hospital infrastructure, nutrition and air quality. Powered by NFHS-5, SRS 2023, IDSP and MoHFW.",
@@ -49,17 +49,17 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: BASE_URL,
-    siteName: "HealthForIndia by Vyasa",
-    title: "HealthForIndia — India's Public Health Transparency Platform",
+    siteName: "Vyasa — India's Public Health Transparency Platform",
+    title: "India's Public Health Transparency Platform",
     description:
       "Real-time district-level health data across 36 states and UTs. IMR, vaccination, disease outbreaks, hospital beds, air quality — all in one place.",
-    images: [{ url: "/og?title=India%27s+Public+Health+Transparency+Platform", width: 1200, height: 630, alt: "HealthForIndia Dashboard" }],
+    images: [{ url: "/og?title=India%27s+Public+Health+Transparency+Platform", width: 1200, height: 630, alt: "Vyasa Dashboard" }],
   },
   twitter: {
     card: "summary_large_image",
     site: "@VyasaHealth",
     creator: "@VyasaHealth",
-    title: "HealthForIndia — India's Public Health Transparency Platform",
+    title: "India's Public Health Transparency Platform",
     description:
       "Real-time district-level health data across 36 states and UTs. IMR, vaccination, disease outbreaks, hospital beds, air quality.",
     images: ["/og?title=India%27s+Public+Health+Transparency+Platform"],
@@ -88,8 +88,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            "name": "HealthForIndia",
-            "alternateName": "HealthForIndia by Vyasa",
+            "name": "Vyasa",
+            "alternateName": "India's Public Health Transparency Platform",
             "url": BASE_URL,
             "description": "India's largest open public health data platform — district-level IMR, vaccination, disease outbreaks, hospital infrastructure across 36 states and 700+ districts.",
             "potentialAction": {
@@ -106,10 +106,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }) }}
         />
         {/* PWA */}
-        <meta name="application-name" content="HealthForIndia" />
+        <meta name="application-name" content="Vyasa" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="HealthForIndia" />
+        <meta name="apple-mobile-web-app-title" content="Vyasa" />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="/icons/icon.svg" />
       </head>

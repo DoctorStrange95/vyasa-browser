@@ -172,7 +172,7 @@ export default function HealthLocker({ user }: Props) {
       if (!r.ok) { showToast(d.error ?? "Could not create share link.", "err"); return; }
       const shareUrl = `${window.location.origin}/health-share/${d.token}`;
       const message  = encodeURIComponent(
-        `Hello Doctor,\nPlease find my health records here:\n${shareUrl}\n(Link valid for 24 hours)\n\nShared via HealthForIndia`
+        `Hello Doctor,\nPlease find my health records here:\n${shareUrl}\n(Link valid for 24 hours)\n\nShared via Vyasa`
       );
       window.open(`https://wa.me/?text=${message}`, "_blank");
     } catch { showToast("Could not create share link.", "err"); }

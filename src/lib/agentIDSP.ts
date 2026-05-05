@@ -235,7 +235,7 @@ async function fetchPIBFeed(): Promise<PHIntelligenceItem[]> {
   try {
     const res = await fetch(
       "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
-      { headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" }, redirect: "follow", next: { revalidate: 0 }, signal: AbortSignal.timeout(8000) }
+      { headers: { "User-Agent": "Vyasa/2.0 (+https://healthforindia.in)" }, redirect: "follow", next: { revalidate: 0 }, signal: AbortSignal.timeout(8000) }
     );
     if (!res.ok) return items;
     const xml   = await res.text();
@@ -261,7 +261,7 @@ async function fetchMoHFWAlerts(): Promise<PHIntelligenceItem[]> {
   try {
     const res = await fetch(
       "https://www.mohfw.gov.in/",
-      { headers: { "User-Agent": "HealthForIndia/2.0" }, next: { revalidate: 0 }, signal: AbortSignal.timeout(8000) }
+      { headers: { "User-Agent": "Vyasa/2.0" }, next: { revalidate: 0 }, signal: AbortSignal.timeout(8000) }
     );
     if (!res.ok) return items;
     const html   = await res.text();
@@ -344,7 +344,7 @@ async function fetchNHPNCDC(): Promise<PHIntelligenceItem[]> {
   for (const { url, src } of urls) {
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0" },
+        headers: { "User-Agent": "Vyasa/2.0" },
         next:    { revalidate: 0 },
         signal:  AbortSignal.timeout(8000),
       });
@@ -424,7 +424,7 @@ async function fetchRSS(
   const items: PHIntelligenceItem[] = [];
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+      headers: { "User-Agent": "Vyasa/2.0 (+https://healthforindia.in)" },
       next:    { revalidate: 0 },
       signal:  AbortSignal.timeout(8000),
     });
@@ -463,7 +463,7 @@ async function fetchGoogleNewsIDSP(): Promise<PHIntelligenceItem[]> {
     try {
       const url = `https://news.google.com/rss/search?q=${q}&hl=en-IN&gl=IN&ceid=IN:en`;
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0" },
+        headers: { "User-Agent": "Vyasa/2.0" },
         next:    { revalidate: 0 },
         signal:  AbortSignal.timeout(8000),
       });
@@ -540,7 +540,7 @@ async function fetchWHOIndia(): Promise<PHIntelligenceItem[]> {
   for (const { url, src } of endpoints) {
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0 (+https://healthforindia.in)" },
+        headers: { "User-Agent": "Vyasa/2.0 (+https://healthforindia.in)" },
         next: { revalidate: 0 },
         signal: AbortSignal.timeout(8000),
       });
@@ -587,7 +587,7 @@ async function fetchNCDCOutbreaks(): Promise<PHIntelligenceItem[]> {
   for (const { url, src } of urls) {
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "HealthForIndia/2.0" },
+        headers: { "User-Agent": "Vyasa/2.0" },
         next: { revalidate: 0 },
         signal: AbortSignal.timeout(8000),
       });

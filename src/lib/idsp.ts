@@ -85,7 +85,7 @@ export async function fetchNHPOutbreakAlerts(): Promise<OutbreakAlert[]> {
     // NHP disease alert RSS / JSON endpoint
     const res = await fetch(
       "https://nhp.gov.in/disease-surveillance_pg.htm",
-      { headers: { "User-Agent": "HealthForIndia/1.0 (+https://healthforindia.in)" }, next: { revalidate: 0 } }
+      { headers: { "User-Agent": "Vyasa/1.0 (+https://healthforindia.in)" }, next: { revalidate: 0 } }
     );
     if (!res.ok) return alerts;
     const html = await res.text();

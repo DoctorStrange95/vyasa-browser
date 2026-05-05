@@ -22,7 +22,7 @@ export default async function SharePage({ params }: { params: { token: string } 
         <div style={{ fontSize: "3rem" }}>⏰</div>
         <h1 style={{ color: "#e2e8f0", margin: 0 }}>Link Expired</h1>
         <p style={{ margin: 0, textAlign: "center" }}>This health record link has expired. Ask the patient to share a new link from their Health Locker.</p>
-        <Link href="/" style={{ color: "#38bdf8", fontSize: "0.88rem" }}>← HealthForIndia</Link>
+        <Link href="/" style={{ color: "#38bdf8", fontSize: "0.88rem" }}>← Vyasa</Link>
       </div>
     );
   }
@@ -42,7 +42,7 @@ export default async function SharePage({ params }: { params: { token: string } 
         <div style={{ maxWidth: "800px", margin: "0 auto", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none" }}>
             <VyasaLogo size={26} />
-            <span style={{ color: "#fff", fontWeight: 700, fontSize: "0.9rem" }}>HealthForIndia</span>
+            <span style={{ color: "#fff", fontWeight: 700, fontSize: "0.9rem" }}>Vyasa</span>
           </Link>
           <span style={{ fontSize: "0.72rem", color: "#475569" }}>
             Shared · expires {expiresAt.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
@@ -59,7 +59,7 @@ export default async function SharePage({ params }: { params: { token: string } 
           <div>
             <div style={{ fontWeight: 700, fontSize: "1rem" }}>{ownerName}</div>
             <div style={{ color: "#64748b", fontSize: "0.78rem" }}>
-              {files.length} health document{files.length !== 1 ? "s" : ""} · Shared via HealthForIndia Health Locker
+              {files.length} health document{files.length !== 1 ? "s" : ""} · Shared via Vyasa Health Locker
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default async function SharePage({ params }: { params: { token: string } 
         )}
 
         <div style={{ marginTop: "2rem", padding: "0.75rem 1rem", background: "#050d1a", borderRadius: "8px", fontSize: "0.72rem", color: "#334155", textAlign: "center" }}>
-          🔒 This link was shared by {ownerName} and expires {expiresAt.toLocaleString("en-IN")}. Powered by HealthForIndia.
+          🔒 This link was shared by {ownerName} and expires {expiresAt.toLocaleString("en-IN")}. Powered by Vyasa.
         </div>
       </div>
     </div>

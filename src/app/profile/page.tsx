@@ -154,7 +154,7 @@ function ProfilePageInner() {
       <div style={{ backgroundColor: "#0a1628", borderBottom: "1px solid #1e3a5f", padding: "0 1.5rem", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none" }}>
           <VyasaLogo size={28} />
-          <span className="font-display" style={{ color: "#fff", fontWeight: 700, fontSize: "0.95rem" }}>HealthForIndia</span>
+          <span className="font-display" style={{ color: "#fff", fontWeight: 700, fontSize: "0.95rem" }}>Vyasa</span>
         </Link>
         <button onClick={handleLogout} style={{ background: "transparent", color: "#64748b", border: "1px solid #1e3a5f", borderRadius: "6px", padding: "0.3rem 0.75rem", fontSize: "0.8rem", cursor: "pointer" }}>
           Sign out
@@ -336,7 +336,7 @@ function ProfilePageInner() {
               <div style={{ textAlign: "center", padding: "2rem 1rem" }}>
                 <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>✅</div>
                 <div style={{ fontWeight: 700, color: "#4ade80", marginBottom: "0.4rem" }}>Thank you!</div>
-                <div style={{ fontSize: "0.82rem", color: "#64748b", marginBottom: "1.25rem" }}>Your feedback helps us improve HealthForIndia.</div>
+                <div style={{ fontSize: "0.82rem", color: "#64748b", marginBottom: "1.25rem" }}>Your feedback helps us improve Vyasa.</div>
                 <button onClick={() => { setFbDone(false); setFbMsg(""); setFbType("general"); }} style={{ background: "#0f2040", border: "1px solid #1e3a5f", color: "#94a3b8", borderRadius: "7px", padding: "0.45rem 1rem", fontSize: "0.82rem", cursor: "pointer" }}>
                   Send Another
                 </button>
@@ -399,7 +399,7 @@ function ProfilePageInner() {
               <div style={{ backgroundColor: "#0a1628", border: "1px dashed #1e3a5f", borderRadius: "12px", padding: "3rem", textAlign: "center", color: "#475569" }}>
                 <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>📎</div>
                 <div style={{ fontWeight: 600, marginBottom: "0.3rem" }}>No submissions yet</div>
-                <div style={{ fontSize: "0.82rem" }}>Upload health data documents to contribute to HealthForIndia.</div>
+                <div style={{ fontSize: "0.82rem" }}>Upload health data documents to contribute to Vyasa.</div>
                 <Link href="/contribute" style={{ display: "inline-block", marginTop: "1rem", background: "#0d9488", color: "#fff", borderRadius: "8px", padding: "0.55rem 1.25rem", textDecoration: "none", fontSize: "0.85rem", fontWeight: 600 }}>
                   Submit Data →
                 </Link>

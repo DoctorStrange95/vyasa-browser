@@ -80,10 +80,10 @@ export default function Header({ user, uiConfig }: { user?: HeaderUser | null; u
           <VyasaLogo size={36} />
           <div>
             <div className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>
-              HealthForIndia
+              Vyasa
             </div>
             <div style={{ fontSize: "0.65rem", color: "#2dd4bf", letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              by Vyasa
+              Public Health Platform
             </div>
           </div>
         </Link>

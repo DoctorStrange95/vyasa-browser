@@ -9,7 +9,7 @@ import HomeSearch from "@/components/HomeSearch";
 import states from "@/data/states.json";
 
 export const metadata: Metadata = {
-  title: "HealthForIndia — India's Public Health Transparency Platform",
+  title: "India's Public Health Transparency Platform",
   description:
     "District-level public health data for every Indian state and UT — infant mortality, vaccination, IDSP disease outbreaks, hospital infrastructure, nutrition and air quality. NFHS-5 · SRS 2023 · MoHFW.",
   alternates: { canonical: "https://healthforindia.vyasa.health" },
@@ -48,7 +48,7 @@ export default function HomePage() {
             "@type": "WebSite",
             "@id": "https://healthforindia.vyasa.health/#website",
             "url": "https://healthforindia.vyasa.health",
-            "name": "HealthForIndia by Vyasa",
+            "name": "Vyasa",
             "description": "India's public health transparency platform with district-level data on IMR, vaccination, disease outbreaks, hospital infrastructure, nutrition and air quality.",
             "publisher": { "@type": "Organization", "name": "Vyasa Health", "url": "https://healthforindia.vyasa.health" },
             "potentialAction": { "@type": "SearchAction", "target": "https://healthforindia.vyasa.health/district/{search_term_string}", "query-input": "required name=search_term_string" },

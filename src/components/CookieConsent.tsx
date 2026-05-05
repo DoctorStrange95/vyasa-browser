@@ -51,7 +51,7 @@ export default function CookieConsent() {
     }}>
       <div style={{ flex: 1, minWidth: "200px" }}>
         <p style={{ margin: 0, fontSize: "0.82rem", color: "#94a3b8", lineHeight: 1.6 }}>
-          We use cookies to keep you signed in and to understand how people use HealthForIndia (analytics only — no ads).{" "}
+          We use cookies to keep you signed in and to understand how people use Vyasa (analytics only — no ads).{" "}
           <Link href="/cookies" style={{ color: "#60a5fa", textDecoration: "underline" }}>Cookie Policy</Link>
           {" · "}
           <Link href="/privacy" style={{ color: "#60a5fa", textDecoration: "underline" }}>Privacy Policy</Link>

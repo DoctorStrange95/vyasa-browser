@@ -185,7 +185,7 @@ export default function JoinPage() {
       <section style={{ backgroundColor: "#060e1c", borderTop: "1px solid #1e3a5f", padding: "1.5rem 1.5rem", textAlign: "center" }}>
         <div style={{ fontSize: "0.78rem", color: "#334155" }}>
           Vyasa Integrated Healthcare Pvt Ltd · Incorporated March 2026 ·{" "}
-          <Link href="/" style={{ color: "#2dd4bf", textDecoration: "none" }}>HealthForIndia →</Link>
+          <Link href="/" style={{ color: "#2dd4bf", textDecoration: "none" }}>Vyasa →</Link>
         </div>
       </section>
 

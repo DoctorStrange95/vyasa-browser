@@ -32,7 +32,7 @@ async function geocodeByNominatim(q: string): Promise<{ lat: number; lng: number
   try {
     const url = `${NOMINATIM}?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=in&addressdetails=1`;
     const res  = await fetch(url, {
-      headers: { "User-Agent": "HealthForIndia/2.0 (healthforindia.in)" },
+      headers: { "User-Agent": "Vyasa/2.0 (healthforindia.in)" },
       next: { revalidate: 86400 },
     });
     const data = await res.json() as Array<{ lat: string; lon: string; display_name: string }>;

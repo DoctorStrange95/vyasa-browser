@@ -4,7 +4,7 @@ import VyasaLogo from "@/components/VyasaLogo";
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Get in touch with the Vyasa HealthForIndia team — partnerships, data corrections, media, and general inquiries.",
+  description: "Get in touch with the Vyasa team — partnerships, data corrections, media, and general inquiries.",
 };
 
 const LINKEDIN = "https://www.linkedin.com/company/vyasa-integrated-healthcare-private-limited/?viewAsMember=true";
@@ -27,8 +27,8 @@ export default function ContactPage() {
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
             <VyasaLogo size={36} />
             <div>
-              <div className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>HealthForIndia</div>
-              <div style={{ fontSize: "0.6rem", color: "#2dd4bf", letterSpacing: "0.12em", textTransform: "uppercase" }}>by Vyasa</div>
+              <div className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>Vyasa</div>
+              <div style={{ fontSize: "0.6rem", color: "#2dd4bf", letterSpacing: "0.12em", textTransform: "uppercase" }}>Public Health Platform</div>
             </div>
           </div>
           <h1 className="font-display" style={{ fontSize: "2.25rem", fontWeight: 700, color: "#fff", marginBottom: "0.6rem" }}>
@@ -100,7 +100,7 @@ export default function ContactPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.25rem" }}>
             {[
               { label: "Company",     value: "Vyasa Integrated Healthcare Pvt. Ltd." },
-              { label: "Platform",    value: "HealthForIndia (healthforindia.vyasa.health)" },
+              { label: "Platform",    value: "Vyasa (healthforindia.vyasa.health)" },
               { label: "Registered",  value: "India" },
               { label: "Data Policy", value: "Reference only — not for clinical decisions" },
             ].map(r => (

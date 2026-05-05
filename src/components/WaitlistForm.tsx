@@ -143,7 +143,7 @@ export default function WaitlistForm() {
         </p>
         <div style={{ backgroundColor: "#0a1628", border: "1px solid #0d948840", borderRadius: "12px", padding: "1.25rem", fontSize: "0.82rem", color: "#64748b", lineHeight: 1.7 }}>
           Meanwhile, track India&apos;s live disease surveillance data at{" "}
-          <a href="/" style={{ color: "#2dd4bf", textDecoration: "none" }}>HealthForIndia →</a>
+          <a href="/" style={{ color: "#2dd4bf", textDecoration: "none" }}>Vyasa →</a>
         </div>
       </div>
     );

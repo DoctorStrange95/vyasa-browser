@@ -26,7 +26,7 @@ export default function SourcesPage() {
           Data Sources
         </h1>
         <p style={{ fontSize: "1rem", color: "#94a3b8", lineHeight: 1.75, maxWidth: "600px" }}>
-          All data on HealthForIndia is sourced from official Indian government
+          All data on Vyasa is sourced from official Indian government
           databases and peer-reviewed public health datasets. Below is a full
           accounting of every data source, its update frequency, and how we
           use it.
@@ -54,7 +54,7 @@ export default function SourcesPage() {
           Disclaimer
         </h3>
         <p style={{ fontSize: "0.85rem", color: "#64748b", lineHeight: 1.75 }}>
-          Data presented on HealthForIndia is aggregated from public government sources
+          Data presented on Vyasa is aggregated from public government sources
           for informational and transparency purposes only. While we strive for accuracy,
           there may be discrepancies due to reporting delays, methodology changes, or
           boundary revisions. This platform does not constitute medical advice. For

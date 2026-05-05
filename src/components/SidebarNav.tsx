@@ -88,7 +88,7 @@ export default function SidebarNav() {
       {/* Brand */}
       <div style={{ padding: "0 1rem 0.85rem", borderBottom: "1px solid #1e3a5f", marginBottom: "0.4rem" }}>
         <div style={{ fontSize: "0.55rem", color: "#334155", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 700 }}>
-          HealthForIndia
+          Vyasa
         </div>
         <div style={{ fontSize: "0.6rem", color: "#2dd4bf", fontWeight: 600, marginTop: "0.1rem" }}>
           Navigation

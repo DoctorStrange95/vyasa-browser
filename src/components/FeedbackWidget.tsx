@@ -202,7 +202,7 @@ export default function FeedbackWidget({ user }: Props) {
         }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "0.3rem" }}>🙏</div>
           <div style={{ fontSize: "0.82rem", fontWeight: 700, color: "#4ade80" }}>Thank you!</div>
-          <div style={{ fontSize: "0.72rem", color: "#475569", marginTop: "0.2rem" }}>Your feedback helps improve HealthForIndia.</div>
+          <div style={{ fontSize: "0.72rem", color: "#475569", marginTop: "0.2rem" }}>Your feedback helps improve Vyasa.</div>
         </div>
       )}
 

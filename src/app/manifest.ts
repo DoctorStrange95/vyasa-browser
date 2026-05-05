@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "HealthForIndia",
-    short_name: "HealthForIndia",
+    name: "Vyasa",
+    short_name: "Vyasa",
     description: "District-level public health data for every Indian state and UT — IMR, vaccination, disease outbreaks, hospital infrastructure and more.",
     start_url: "/",
     display: "standalone",

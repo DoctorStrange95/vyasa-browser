@@ -20,7 +20,7 @@ const MENU = [
   { href: "/admin/contributors", icon: "👥", label: "Contributors & Sponsors", desc: "Manage data authors, sponsors, acknowledgements" },
   { href: "/admin/team",         icon: "👤", label: "Team Page Editor",        desc: "Edit team members, founder bio, timeline, photos & CTA" },
   { href: "/sources",            icon: "📚", label: "Data Sources (public)",   desc: "View live public-facing data sources page" },
-  { href: "/",                   icon: "🌐", label: "View Live Site",          desc: "Open the public-facing HealthForIndia portal" },
+  { href: "/",                   icon: "🌐", label: "View Live Site",          desc: "Open the public-facing Vyasa portal" },
 ];
 
 async function fetchSiteStats() {
@@ -103,7 +103,7 @@ export default async function AdminDashboard() {
             Dashboard
           </h1>
           <p style={{ color: "#64748b", fontSize: "0.88rem" }}>
-            Manage HealthForIndia data, feedback, health centres and contributors.
+            Manage Vyasa data, feedback, health centres and contributors.
           </p>
         </div>
 

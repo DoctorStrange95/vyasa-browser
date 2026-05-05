@@ -243,7 +243,7 @@ export default function DashboardPage() {
           const { latitude: lat, longitude: lon } = pos.coords;
           const geo = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=en&zoom=14`,
-            { headers: { "User-Agent": "HealthForIndia/2.0" } }
+            { headers: { "User-Agent": "Vyasa/2.0" } }
           ).then(r => r.json());
 
           const addr = geo?.address ?? {};

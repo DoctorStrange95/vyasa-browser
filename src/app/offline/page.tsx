@@ -16,7 +16,7 @@ export default function OfflinePage() {
         You&rsquo;re offline
       </h1>
       <p style={{ color: "#64748b", fontSize: "0.9rem", maxWidth: "380px", lineHeight: 1.7, marginBottom: "2rem" }}>
-        HealthForIndia needs a connection to load live health data. Check your network and try again — recently visited pages will load from cache.
+        Vyasa needs a connection to load live health data. Check your network and try again — recently visited pages will load from cache.
       </p>
       <button
         onClick={() => window.location.reload()}

@@ -28,12 +28,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     description: desc,
     alternates: { canonical: url },
     openGraph: {
-      title: `${city.name} Public Health Dashboard | HealthForIndia`,
+      title: `${city.name} Public Health Dashboard | Vyasa`,
       description: desc,
       url,
       images: [{ url: `/og?title=${encodeURIComponent(city.name + " Health Data")}&sub=${encodeURIComponent(desc)}&state=${encodeURIComponent(stateName)}`, width: 1200, height: 630 }],
     },
-    twitter: { card: "summary_large_image", title: `${city.name} Health Data | HealthForIndia`, description: desc, images: [`/og?title=${encodeURIComponent(city.name + " Health Data")}&state=${encodeURIComponent(stateName)}`] },
+    twitter: { card: "summary_large_image", title: `${city.name} Health Data | Vyasa`, description: desc, images: [`/og?title=${encodeURIComponent(city.name + " Health Data")}&state=${encodeURIComponent(stateName)}`] },
   };
 }
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
-  description: "How HealthForIndia uses cookies and how you can manage your preferences.",
+  description: "How Vyasa uses cookies and how you can manage your preferences.",
 };
 
 const EFFECTIVE = "1 April 2025";
@@ -79,7 +79,7 @@ export default function CookiesPage() {
         <Section title="Managing your preferences">
           <p style={{ marginBottom: "0.75rem" }}>You can control cookies in several ways:</p>
           <ul style={{ paddingLeft: "1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <li><strong style={{ color: "#e2e8f0" }}>Cookie banner</strong> — when you first visit HealthForIndia, a banner lets you accept all cookies or decline analytics cookies.</li>
+            <li><strong style={{ color: "#e2e8f0" }}>Cookie banner</strong> — when you first visit Vyasa, a banner lets you accept all cookies or decline analytics cookies.</li>
             <li><strong style={{ color: "#e2e8f0" }}>Cookie Settings link</strong> — in the footer, clicking &quot;Cookie Settings&quot; resets your preference so the banner reappears.</li>
             <li><strong style={{ color: "#e2e8f0" }}>Browser settings</strong> — most browsers let you block or delete cookies. Note that blocking strictly necessary cookies will prevent login from working.</li>
           </ul>
