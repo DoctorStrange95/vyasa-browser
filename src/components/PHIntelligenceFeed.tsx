@@ -454,11 +454,10 @@ export default function PHIntelligenceFeed({ maxItems }: { maxItems?: number } =
             const d = await fetchPHI() as FeedData;
             setData(d);
             setSessionCache(d);
-              if (attempts >= 3 || !d.fromCache) {
-                clearInterval(pollRef.current!);
-                pollRef.current = null;
-                setRefreshMsg(null);
-              }
+            if (attempts >= 3 || !d.fromCache) {
+              clearInterval(pollRef.current!);
+              pollRef.current = null;
+              setRefreshMsg(null);
             }
           } catch { /* keep polling */ }
           if (attempts >= 8) {
