@@ -77,9 +77,9 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("push", (event) => {
   if (!event.data) return;
   let payload;
-  try { payload = event.data.json(); } catch { payload = { title: "HealthForIndia", body: event.data.text() }; }
+  try { payload = event.data.json(); } catch { payload = { title: "Vyasa", body: event.data.text() }; }
 
-  const title = payload.title ?? "HealthForIndia Alert";
+  const title = payload.title ?? "Vyasa Alert";
   const options = {
     body:    payload.body   ?? "",
     icon:    payload.icon   ?? "/icons/icon.svg",

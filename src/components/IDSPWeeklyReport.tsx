@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { fetchPHI } from "@/lib/phiCache";
+import PushNotificationSetup from "@/components/PushNotificationSetup";
 import type { IDSPWeeklyMeta } from "@/app/api/idsp-weekly/route";
 import type { IDSPOutbreak } from "@/lib/idspPDFParser";
 
@@ -223,6 +224,11 @@ export default function IDSPWeeklyReport() {
             }}>
             All Reports ↗
           </a>
+        </div>
+
+        {/* Push notification opt-in */}
+        <div style={{ maxWidth: "340px" }}>
+          <PushNotificationSetup />
         </div>
       </div>
 

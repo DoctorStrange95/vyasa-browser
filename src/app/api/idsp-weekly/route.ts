@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fsGet } from "@/lib/firestore";
-import { adminSet } from "@/lib/firestore-admin";
+import { adminSet, getAdminDb } from "@/lib/firestore-admin";
 import { fetchAndParseIDSPPdf } from "@/lib/idspPDFParser";
 import type { IDSPParsedReport, IDSPOutbreak, IDSPNewsLink } from "@/lib/idspPDFParser";
 
@@ -94,6 +94,54 @@ async function scrapeLatestPdfUrl(): Promise<{ url: string; week: number; year: 
   return { url, week: best.week, year: best.year };
 }
 
+async function sendOutbreakPush(report: IDSPWeeklyMeta) {
+  const vapidPublic  = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
+  const vapidPrivate = process.env.VAPID_PRIVATE_KEY ?? "";
+  const vapidSubject = process.env.VAPID_SUBJECT ?? "mailto:admin@vyasaa.com";
+  if (!vapidPublic || !vapidPrivate) return;
+
+  const webpush = (await import("web-push")).default;
+  webpush.setVapidDetails(vapidSubject, vapidPublic, vapidPrivate);
+
+  const db = getAdminDb();
+  const snap = await db.collection("push_subscriptions").limit(500).get();
+
+  const topDiseases = Object.entries(
+    (report.outbreaks ?? []).reduce<Record<string, number>>((acc, o) => {
+      acc[o.disease] = (acc[o.disease] ?? 0) + 1;
+      return acc;
+    }, {})
+  ).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([d]) => d).join(", ");
+
+  const payload = JSON.stringify({
+    title: `IDSP Week ${report.week} · ${report.totalOutbreaks ?? report.outbreaks?.length ?? 0} Outbreaks`,
+    body:  `${topDiseases} — ${report.reportingStates ?? 0} states reporting. Tap to view.`,
+    url:   "/",
+    tag:   "idsp-weekly",
+    icon:  "/icons/icon.svg",
+  });
+
+  const stale: string[] = [];
+  await Promise.allSettled(snap.docs.map(async doc => {
+    const sub = doc.data();
+    try {
+      await webpush.sendNotification(
+        { endpoint: sub.endpoint as string, keys: sub.keys as Record<string, string> },
+        payload,
+      );
+    } catch (e: unknown) {
+      const status = (e as { statusCode?: number }).statusCode;
+      if (status === 404 || status === 410) stale.push(doc.id);
+    }
+  }));
+
+  if (stale.length) {
+    const batch = db.batch();
+    stale.forEach(id => batch.delete(db.collection("push_subscriptions").doc(id)));
+    await batch.commit();
+  }
+}
+
 export async function GET(req: Request) {
   const force = new URL(req.url).searchParams.get("force") === "1";
 
@@ -131,6 +179,8 @@ export async function GET(req: Request) {
     const alreadySaved = await fsGet(CACHE_COL, weekDocId);
     if (!alreadySaved) {
       await adminSet(CACHE_COL, weekDocId, fresh as unknown as Record<string, unknown>);
+      // New week — send push notifications to all subscribers
+      sendOutbreakPush(fresh).catch(() => {});
     }
 
     return NextResponse.json({ ...fresh, fromCache: false });
