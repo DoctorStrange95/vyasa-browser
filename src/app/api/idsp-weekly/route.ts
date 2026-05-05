@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { fsGet, fsSet } from "@/lib/firestore";
+import { fsGet } from "@/lib/firestore";
+import { adminSet } from "@/lib/firestore-admin";
 import { fetchAndParseIDSPPdf } from "@/lib/idspPDFParser";
 import type { IDSPParsedReport, IDSPOutbreak, IDSPNewsLink } from "@/lib/idspPDFParser";
 
@@ -122,7 +123,7 @@ export async function GET(req: Request) {
       fetchedAt: new Date().toISOString(),
     };
 
-    await fsSet(CACHE_COL, CACHE_ID, fresh as unknown as Record<string, unknown>);
+    await adminSet(CACHE_COL, CACHE_ID, fresh as unknown as Record<string, unknown>);
     return NextResponse.json({ ...fresh, fromCache: false });
   } catch (err) {
     const cached = await fsGet(CACHE_COL, CACHE_ID) as IDSPWeeklyMeta | null;
