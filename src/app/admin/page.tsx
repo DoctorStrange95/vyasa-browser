@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import AdminLogout from "./AdminLogout";
 import AdminRefreshButton from "./AdminRefreshButton";
+import AdminPushSender from "./AdminPushSender";
 import VyasaLogo from "@/components/VyasaLogo";
 import { getAdminDb } from "@/lib/firestore-admin";
 import { readFile } from "fs/promises";
@@ -173,6 +174,8 @@ export default async function AdminDashboard() {
             <AdminRefreshButton />
           </div>
         </div>
+
+        <AdminPushSender />
       </div>
     </div>
   );
