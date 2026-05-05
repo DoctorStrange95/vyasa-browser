@@ -3,7 +3,25 @@ import { getAdminSession } from "@/lib/auth";
 import { adminList, adminQuery } from "@/lib/firestore-admin";
 import { fsGet } from "@/lib/firestore";
 
-export async function GET() {
+const IDSP_TTL_HOURS = 24 * 7;
+
+async function getIDSPData(req: Request) {
+  const cached = await fsGet("idsp_weekly", "latest_v3");
+  const fetchedAt = cached?.fetchedAt as string | undefined;
+  const ageHours = fetchedAt ? (Date.now() - new Date(fetchedAt).getTime()) / 3_600_000 : Infinity;
+
+  // If stale, trigger a fresh fetch — this now writes via Admin SDK so it persists
+  if (ageHours >= IDSP_TTL_HOURS) {
+    try {
+      const base = new URL(req.url).origin;
+      const fresh = await fetch(`${base}/api/idsp-weekly?force=1`, { cache: "no-store" });
+      if (fresh.ok) return fresh.json();
+    } catch { /* fall through to cached */ }
+  }
+  return cached;
+}
+
+export async function GET(req: Request) {
   const isAdmin = await getAdminSession();
   if (!isAdmin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -15,7 +33,7 @@ export async function GET() {
     ]).then(([live, pending, rejected]) => [...live, ...pending, ...rejected]),
     adminList("pendingSubmissions", 300),
     adminList("waitlist", 500),
-    fsGet("idsp_weekly", "latest_v3"),
+    getIDSPData(req),
     adminList("feedback", 500),
     adminList("users", 500),
   ]);
