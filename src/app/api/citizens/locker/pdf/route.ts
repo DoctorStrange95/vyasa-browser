@@ -42,7 +42,7 @@ export async function POST() {
   coverPage.drawText(`${fileMeta.length} document${fileMeta.length !== 1 ? "s" : ""}`, {
     x: 40, y: height - 160, size: 13, font: boldFont, color: rgb(0.52, 0.76, 0.58),
   });
-  coverPage.drawText("Vyasa · healthforindia.vyasa.health", {
+  coverPage.drawText("Vyasa · vyasaa.com", {
     x: 40, y: 30, size: 9, font, color: rgb(0.25, 0.35, 0.45),
   });
 

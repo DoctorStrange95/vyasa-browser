@@ -100,7 +100,7 @@ export default function ContactPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.25rem" }}>
             {[
               { label: "Company",     value: "Vyasa Integrated Healthcare Pvt. Ltd." },
-              { label: "Platform",    value: "Vyasa (healthforindia.vyasa.health)" },
+              { label: "Platform",    value: "Vyasa (vyasaa.com)" },
               { label: "Registered",  value: "India" },
               { label: "Data Policy", value: "Reference only — not for clinical decisions" },
             ].map(r => (

@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
                 {tag}
               </div>
             ))}
-            <div style={{ marginLeft: "auto", fontSize: 14, color: "#1e3a5f" }}>healthforindia.vyasa.health</div>
+            <div style={{ marginLeft: "auto", fontSize: 14, color: "#1e3a5f" }}>vyasaa.com</div>
           </div>
         </div>
       </div>

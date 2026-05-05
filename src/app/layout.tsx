@@ -14,7 +14,7 @@ import PageTracker from "@/components/PageTracker";
 import PWASetup from "@/components/PWASetup";
 import { getSiteConfig } from "@/lib/siteConfig";
 
-const BASE_URL = "https://healthforindia.vyasa.health";
+const BASE_URL = "https://vyasaa.com";
 
 export const viewport: Viewport = {
   width: "device-width",

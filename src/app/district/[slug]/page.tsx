@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     "hospital infrastructure, disease outbreaks, vaccination coverage.",
     "Source: CPCB, NFHS-5, IDSP, MoHFW.",
   ].filter(Boolean).join(" ");
-  const url = `https://healthforindia.vyasa.health/district/${city.slug}`;
+  const url = `https://vyasaa.com/district/${city.slug}`;
   return {
     title: `${city.name} Health Data — AQI, Hospitals & Disease Surveillance | ${stateName}`,
     description: desc,
@@ -106,7 +106,7 @@ export default async function DistrictPage({ params }: { params: { slug: string 
     aqi, aqiLabel,
   };
 
-  const districtUrl = `https://healthforindia.vyasa.health/district/${city.slug}`;
+  const districtUrl = `https://vyasaa.com/district/${city.slug}`;
 
   return (
     <div style={{ backgroundColor: "#070f1e", minHeight: "100vh" }}>
@@ -130,8 +130,8 @@ export default async function DistrictPage({ params }: { params: { slug: string 
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://healthforindia.vyasa.health" },
-          ...(stateData ? [{ "@type": "ListItem", "position": 2, "name": stateData.name, "item": `https://healthforindia.vyasa.health/state/${stateData.slug}` }] : []),
+          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://vyasaa.com" },
+          ...(stateData ? [{ "@type": "ListItem", "position": 2, "name": stateData.name, "item": `https://vyasaa.com/state/${stateData.slug}` }] : []),
           { "@type": "ListItem", "position": stateData ? 3 : 2, "name": city.name, "item": districtUrl },
         ],
       }} />

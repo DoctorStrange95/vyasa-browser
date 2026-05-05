@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         </p>
 
         <Section title="1. Who we are">
-          <p>Vyasa is operated by <strong style={{ color: "#e2e8f0" }}>Vyasa Integrated Healthcare Private Limited</strong>, a company registered in India. We build tools that make public health data accessible to citizens, policymakers and researchers. This policy explains how we handle personal information when you use our platform at <em>healthforindia.vyasa.health</em> (the "Platform").</p>
+          <p>Vyasa is operated by <strong style={{ color: "#e2e8f0" }}>Vyasa Integrated Healthcare Private Limited</strong>, a company registered in India. We build tools that make public health data accessible to citizens, policymakers and researchers. This policy explains how we handle personal information when you use our platform at <em>vyasaa.com</em> (the "Platform").</p>
         </Section>
 
         <Section title="2. Data we collect">

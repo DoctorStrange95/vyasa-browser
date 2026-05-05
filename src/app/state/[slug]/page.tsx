@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     `health score ${score}/100.`,
     "Source: NFHS-5, SRS 2023, IDSP, MoHFW.",
   ].filter(Boolean).join(", ");
-  const url = `https://healthforindia.vyasa.health/state/${s.slug}`;
+  const url = `https://vyasaa.com/state/${s.slug}`;
   return {
     title: `${s.name} — IMR, Vaccination & Disease Surveillance Data`,
     description: desc,
@@ -149,7 +149,7 @@ export default async function StatePage({ params }: { params: { slug: string } }
   const ranked = [...states].map(s => healthScore(s)).sort((a,b) => b - a);
   const rank = ranked.indexOf(score) + 1;
 
-  const stateUrl = `https://healthforindia.vyasa.health/state/${state.slug}`;
+  const stateUrl = `https://vyasaa.com/state/${state.slug}`;
 
   return (
     <div style={{ backgroundColor: "#070f1e", minHeight: "100vh" }}>
@@ -171,7 +171,7 @@ export default async function StatePage({ params }: { params: { slug: string } }
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://healthforindia.vyasa.health" },
+          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://vyasaa.com" },
           { "@type": "ListItem", "position": 2, "name": state.name, "item": stateUrl },
         ],
       }} />
