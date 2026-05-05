@@ -123,7 +123,16 @@ export async function GET(req: Request) {
       fetchedAt: new Date().toISOString(),
     };
 
+    // Save latest (used by home page cache)
     await adminSet(CACHE_COL, CACHE_ID, fresh as unknown as Record<string, unknown>);
+
+    // Save historical snapshot keyed by year+week — never overwrite an existing week
+    const weekDocId = `${fresh.year}_w${String(fresh.week).padStart(2, "0")}`;
+    const alreadySaved = await fsGet(CACHE_COL, weekDocId);
+    if (!alreadySaved) {
+      await adminSet(CACHE_COL, weekDocId, fresh as unknown as Record<string, unknown>);
+    }
+
     return NextResponse.json({ ...fresh, fromCache: false });
   } catch (err) {
     const cached = await fsGet(CACHE_COL, CACHE_ID) as IDSPWeeklyMeta | null;

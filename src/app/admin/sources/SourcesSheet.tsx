@@ -47,9 +47,11 @@ interface UserRow {
   avatar?: string; createdAt?: string; lastLogin?: string;
 }
 
+type IDSPWeek = { _id?: string; outbreaks?: IDSPRow[]; week?: number; year?: number; pdfUrl?: string; fetchedAt?: string };
+
 type AllData = {
   phi: PHIRow[];
-  idsp: { outbreaks?: IDSPRow[]; week?: number; year?: number; pdfUrl?: string; fetchedAt?: string } | null;
+  idsp: IDSPWeek[];
   submissions: SubRow[];
   feedback: FeedbackRow[];
   waitlist: WaitlistRow[];
@@ -126,26 +128,33 @@ type TabId = typeof TABS[number]["id"];
 
 /* ══════════════════════════════════════════════════════════════════════════ */
 export default function SourcesSheet() {
-  const [data,       setData]       = useState<AllData | null>(null);
-  const [adminError, setAdminError] = useState<string | null>(null);
-  const [loading,    setLoading]    = useState(true);
-  const [tab,        setTab]        = useState<TabId>("phi");
-  const [search,     setSearch]     = useState("");
+  const [data,        setData]        = useState<AllData | null>(null);
+  const [adminError,  setAdminError]  = useState<string | null>(null);
+  const [loading,     setLoading]     = useState(true);
+  const [tab,         setTab]         = useState<TabId>("phi");
+  const [search,      setSearch]      = useState("");
+  const [selectedWeek, setSelectedWeek] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/sources")
       .then(r => r.json())
       .then((d: AllData & { _error?: string }) => {
         if (d._error) setAdminError(d._error);
-        setData(d as AllData);
+        const loaded = d as AllData;
+        setData(loaded);
+        // Default to the most recent week
+        if (loaded.idsp?.length) setSelectedWeek(String(loaded.idsp[0]._id ?? ""));
         setLoading(false);
       });
   }, []);
 
+  /* ── active IDSP week ── */
+  const activeWeek = (data?.idsp ?? []).find(w => String(w._id) === selectedWeek) ?? data?.idsp?.[0] ?? null;
+
   /* ── counts for tab badges ── */
   const counts: Record<TabId, number> = {
     phi:         data?.phi.length              ?? 0,
-    idsp:        data?.idsp?.outbreaks?.length ?? 0,
+    idsp:        activeWeek?.outbreaks?.length ?? 0,
     users:       data?.users.length            ?? 0,
     submissions: data?.submissions.length      ?? 0,
     feedback:    data?.feedback.length         ?? 0,
@@ -226,7 +235,7 @@ export default function SourcesSheet() {
         ) : (
           <>
             {tab === "phi"         && <PHISheet         rows={filter((data?.phi ?? []) as Record<string, unknown>[])}         onExport={() => downloadCSV("phi_feed", toPHIExport(data?.phi ?? []))} />}
-            {tab === "idsp"        && <IDSPSheet        rows={filter((data?.idsp?.outbreaks ?? []) as Record<string, unknown>[])} meta={data?.idsp ?? null} onExport={() => downloadCSV("idsp_outbreaks", (data?.idsp?.outbreaks ?? []) as Record<string, unknown>[])} />}
+            {tab === "idsp"        && <IDSPSheet        rows={filter((activeWeek?.outbreaks ?? []) as Record<string, unknown>[])} meta={activeWeek} weeks={data?.idsp ?? []} selectedWeek={selectedWeek} onSelectWeek={setSelectedWeek} onExport={() => downloadCSV(`idsp_outbreaks_w${activeWeek?.week}`, (activeWeek?.outbreaks ?? []) as Record<string, unknown>[])} />}
             {tab === "users"       && <UsersSheet       rows={filter((data?.users ?? []) as Record<string, unknown>[])}          onExport={() => downloadCSV("users", toUsersExport(data?.users ?? []))} />}
             {tab === "submissions" && <SubSheet         rows={filter((data?.submissions ?? []) as Record<string, unknown>[])}    onExport={() => downloadCSV("submissions", toSubExport(data?.submissions ?? []))} />}
             {tab === "feedback"    && <FeedbackSheet    rows={filter((data?.feedback ?? []) as Record<string, unknown>[])}       onExport={() => downloadCSV("feedback", toFeedbackExport(data?.feedback ?? []))} />}
@@ -380,17 +389,33 @@ function PHISheet({ rows, onExport }: { rows: Record<string, unknown>[]; onExpor
 }
 
 /* ══════════════════════ IDSP OUTBREAKS ════════════════════════════════════ */
-function IDSPSheet({ rows, meta, onExport }: { rows: Record<string, unknown>[]; meta: AllData["idsp"]; onExport: () => void }) {
+function IDSPSheet({ rows, meta, weeks, selectedWeek, onSelectWeek, onExport }: {
+  rows: Record<string, unknown>[];
+  meta: IDSPWeek | null;
+  weeks: IDSPWeek[];
+  selectedWeek: string | null;
+  onSelectWeek: (id: string) => void;
+  onExport: () => void;
+}) {
   const typed = rows as IDSPRow[];
   return (
     <>
-      {meta && (
-        <div style={{ display: "flex", gap: "1.5rem", padding: "0.65rem 1rem", borderBottom: "1px solid #1e3a5f", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.72rem", color: "#475569" }}>Week <span style={{ color: "#2dd4bf", fontFamily: "monospace" }}>{meta.week}/{meta.year}</span></span>
-          {meta.pdfUrl && <a href={meta.pdfUrl} target="_blank" rel="noreferrer" style={{ fontSize: "0.72rem", color: "#2dd4bf" }}>↗ Source PDF</a>}
-          {meta.fetchedAt && <span style={{ fontSize: "0.72rem", color: "#475569" }}>Cached {fmtDate(meta.fetchedAt)}</span>}
-        </div>
-      )}
+      <div style={{ display: "flex", gap: "1rem", padding: "0.65rem 1rem", borderBottom: "1px solid #1e3a5f", flexWrap: "wrap", alignItems: "center" }}>
+        {/* Week selector */}
+        <select
+          value={selectedWeek ?? ""}
+          onChange={e => onSelectWeek(e.target.value)}
+          style={{ backgroundColor: "#0f2040", border: "1px solid #1e3a5f", borderRadius: "6px", color: "#2dd4bf", fontSize: "0.75rem", padding: "0.25rem 0.5rem", fontFamily: "monospace", cursor: "pointer" }}
+        >
+          {weeks.map(w => (
+            <option key={String(w._id)} value={String(w._id)}>
+              Week {w.week}/{w.year} — {w.outbreaks?.length ?? 0} outbreaks
+            </option>
+          ))}
+        </select>
+        {meta?.pdfUrl && <a href={meta.pdfUrl} target="_blank" rel="noreferrer" style={{ fontSize: "0.72rem", color: "#2dd4bf" }}>↗ Source PDF</a>}
+        {meta?.fetchedAt && <span style={{ fontSize: "0.72rem", color: "#475569" }}>Cached {fmtDate(meta.fetchedAt)}</span>}
+      </div>
       <SheetHeader count={typed.length} onExport={onExport} />
       <div style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
