@@ -23,7 +23,7 @@ export default function OutbreakAlerts() {
   useEffect(() => {
     fetchPHI()
       .then(d => {
-        const outbreaks: PHItem[] = (d.items ?? []).filter((i: PHItem) => i.type === "Outbreak");
+        const outbreaks = (d.items as PHItem[] ?? []).filter(i => i.type === "Outbreak");
         setItems(outbreaks.slice(0, 8));
         setLoaded(true);
       })
