@@ -126,7 +126,7 @@ async function sendOutbreakPush(report: IDSPWeeklyMeta) {
     const sub = doc.data();
     try {
       await webpush.sendNotification(
-        { endpoint: sub.endpoint as string, keys: sub.keys as Record<string, string> },
+        { endpoint: sub.endpoint as string, keys: sub.keys as { p256dh: string; auth: string } },
         payload,
       );
     } catch (e: unknown) {
