@@ -171,7 +171,7 @@ export default async function StatePage({ params }: { params: { slug: string } }
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://vyasaa.com" },
+          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://www.vyasaa.com" },
           { "@type": "ListItem", "position": 2, "name": state.name, "item": stateUrl },
         ],
       }} />

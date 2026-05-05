@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import states from "@/data/states.json";
 import cities from "@/data/cities.json";
 
-const BASE = "https://vyasaa.com";
+const BASE = "https://www.vyasaa.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date().toISOString();

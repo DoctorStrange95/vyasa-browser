@@ -130,7 +130,7 @@ export default async function DistrictPage({ params }: { params: { slug: string 
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://vyasaa.com" },
+          { "@type": "ListItem", "position": 1, "name": "India", "item": "https://www.vyasaa.com" },
           ...(stateData ? [{ "@type": "ListItem", "position": 2, "name": stateData.name, "item": `https://vyasaa.com/state/${stateData.slug}` }] : []),
           { "@type": "ListItem", "position": stateData ? 3 : 2, "name": city.name, "item": districtUrl },
         ],
