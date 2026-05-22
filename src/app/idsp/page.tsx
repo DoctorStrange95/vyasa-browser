@@ -98,12 +98,13 @@ export default async function IDSPPage() {
   }));
 
   // ── Per-state district breakdown (for interactive drill-down) ─────────────
-  const stateDistrictMap = new Map<string, Map<string, { outbreaks: number; cases: number; deaths: number }>>();
+  const stateDistrictMap = new Map<string, Map<string, { outbreaks: number; cases: number; deaths: number; diseases: string[] }>>();
   for (const o of allOutbreaks) {
     if (!stateDistrictMap.has(o.state)) stateDistrictMap.set(o.state, new Map());
     const dm = stateDistrictMap.get(o.state)!;
-    const prev = dm.get(o.district) ?? { outbreaks: 0, cases: 0, deaths: 0 };
+    const prev = dm.get(o.district) ?? { outbreaks: 0, cases: 0, deaths: 0, diseases: [] };
     prev.outbreaks++; prev.cases += o.cases ?? 0; prev.deaths += o.deaths ?? 0;
+    if (o.disease && !prev.diseases.includes(o.disease)) prev.diseases.push(o.disease);
     dm.set(o.district, prev);
   }
 

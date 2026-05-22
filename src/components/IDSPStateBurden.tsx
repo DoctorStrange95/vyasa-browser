@@ -8,7 +8,7 @@ export interface StateStatRow {
   outbreaks: number;
   cases: number;
   deaths: number;
-  districts: { district: string; outbreaks: number; cases: number; deaths: number }[];
+  districts: { district: string; outbreaks: number; cases: number; deaths: number; diseases: string[] }[];
 }
 
 export default function IDSPStateBurden({ rows }: { rows: StateStatRow[] }) {
@@ -66,19 +66,33 @@ export default function IDSPStateBurden({ rows }: { rows: StateStatRow[] }) {
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
                           {districts.map(d => (
-                            <div key={d.district} style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.3rem 0.5rem", borderRadius: "6px", backgroundColor: "#0f172a" }}>
-                              <span style={{ color: "#e2e8f0", fontSize: "0.78rem", minWidth: "140px" }}>{d.district || "—"}</span>
-                              <span style={{ fontSize: "0.72rem", color: "#64748b", fontFamily: "'IBM Plex Mono', monospace" }}>
-                                {d.outbreaks} outbreak{d.outbreaks !== 1 ? "s" : ""}
-                              </span>
-                              <span style={{ fontSize: "0.72rem", color: "#fb923c", fontFamily: "'IBM Plex Mono', monospace" }}>
-                                {d.cases.toLocaleString()} cases
-                              </span>
-                              {d.deaths > 0 && (
-                                <span style={{ fontSize: "0.72rem", color: "#ef4444", fontFamily: "'IBM Plex Mono', monospace" }}>
-                                  {d.deaths} deaths
+                            <div key={d.district} style={{ padding: "0.4rem 0.5rem", borderRadius: "6px", backgroundColor: "#0f172a", marginBottom: "0.1rem" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.25rem" }}>
+                                <span style={{ color: "#e2e8f0", fontSize: "0.78rem", fontWeight: 500, minWidth: "140px" }}>{d.district || "—"}</span>
+                                <span style={{ fontSize: "0.72rem", color: "#64748b", fontFamily: "'IBM Plex Mono', monospace" }}>
+                                  {d.outbreaks} outbreak{d.outbreaks !== 1 ? "s" : ""}
                                 </span>
-                              )}
+                                <span style={{ fontSize: "0.72rem", color: "#fb923c", fontFamily: "'IBM Plex Mono', monospace" }}>
+                                  {d.cases.toLocaleString()} cases
+                                </span>
+                                {d.deaths > 0 && (
+                                  <span style={{ fontSize: "0.72rem", color: "#ef4444", fontFamily: "'IBM Plex Mono', monospace" }}>
+                                    {d.deaths} deaths
+                                  </span>
+                                )}
+                              </div>
+                              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem" }}>
+                                {d.diseases.map(disease => (
+                                  <span key={disease} style={{
+                                    fontSize: "0.65rem", color: "#7dd3fc",
+                                    backgroundColor: "#0c2340", border: "1px solid #1e3a5f",
+                                    borderRadius: "4px", padding: "0.1rem 0.4rem",
+                                    fontFamily: "inherit",
+                                  }}>
+                                    {disease}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
                           ))}
                         </div>
