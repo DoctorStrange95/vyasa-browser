@@ -215,7 +215,7 @@ function extractDisease(text: string): { disease: string; before: string; after:
 }
 
 function regexParseOutbreaks(rawText: string, week: number, year: number): IDSPOutbreak[] {
-  const UID_RE = /\b([A-Z]{2}\/[A-Z]{2,6}\/\d{4}\/\d{1,2}\/\d{3,4})\b/g;
+  const UID_RE = /\b([A-Z]{2}\/[A-Z]{2,6}\/\d{4}\/\d{1,2}\/\d{1,4})\b/g;
   const matches: { uid: string; index: number }[] = [];
   let m: RegExpExecArray | null;
   while ((m = UID_RE.exec(rawText)) !== null) {
