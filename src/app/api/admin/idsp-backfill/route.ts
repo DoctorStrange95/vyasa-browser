@@ -25,27 +25,39 @@ export async function POST(req: Request) {
     }
     log.push(`✓ Found ${entries.length} weeks for ${year}: ${entries.map(e => `W${e.week}`).join(", ")}`);
 
-    // 2. Find which weeks are already in Firestore
+    // 2. Find which weeks are already in Firestore (with full data to detect broken parses)
     const existing = await adminList("idsp_weekly", 200);
-    const existingIds = new Set(
-      (existing as { _id: string }[])
+    type WeekDoc = { _id: string; outbreaks?: unknown[] };
+    const existingMap = new Map<string, WeekDoc>(
+      (existing as WeekDoc[])
         .filter(d => /^\d{4}_w\d{2}$/.test(String(d._id)))
-        .map(d => String(d._id))
+        .map(d => [String(d._id), d])
     );
 
     const toFetch = entries.filter(e => {
       const docId = `${e.year}_w${String(e.week).padStart(2, "0")}`;
-      return force || !existingIds.has(docId);
+      if (force) return true;
+      if (!existingMap.has(docId)) return true;
+      // Auto re-fetch weeks that were saved with 0 outbreaks (broken parse from old regex)
+      const outbreakCount = existingMap.get(docId)?.outbreaks?.length ?? -1;
+      if (outbreakCount === 0) return true;
+      return false;
+    });
+
+    const zeroWeeks = entries.filter(e => {
+      const docId = `${e.year}_w${String(e.week).padStart(2, "0")}`;
+      return existingMap.has(docId) && (existingMap.get(docId)?.outbreaks?.length ?? -1) === 0;
     });
 
     if (toFetch.length === 0) {
-      log.push(`✓ All ${entries.length} weeks already exist in Firestore. Use force=true to re-fetch.`);
+      log.push(`✓ All ${entries.length} weeks already exist in Firestore with data. Use force=true to re-fetch all.`);
       return NextResponse.json({ ok: true, log, fetched: 0, skipped: entries.length });
     }
 
     const already = entries.length - toFetch.length;
-    if (already > 0) log.push(`⚠ Skipping ${already} weeks already in Firestore`);
-    log.push(`Fetching ${toFetch.length} missing weeks sequentially (respecting Groq rate limits)…`);
+    if (already > 0) log.push(`⚠ Skipping ${already} weeks already in Firestore (with data)`);
+    if (zeroWeeks.length > 0) log.push(`⚠ Auto re-fetching ${zeroWeeks.length} weeks saved with 0 outbreaks: ${zeroWeeks.map(e => `W${e.week}`).join(", ")}`);
+    log.push(`Fetching ${toFetch.length} weeks sequentially…`);
 
     // 3. Fetch and parse each missing week sequentially
     let fetched = 0;

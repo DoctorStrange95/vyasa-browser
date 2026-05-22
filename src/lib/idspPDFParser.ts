@@ -53,13 +53,14 @@ The report table has columns in this EXACT order:
 Unique ID | State/UT | District | Disease/Illness | No. of Cases | No. of Deaths | Date of Start | Date of Reporting | Current Status | Comments
 
 Extract ALL outbreak records and return a JSON array. Each element must have:
-- uid: Unique ID string (e.g. "AP/EAS/2026/10/371")
+- uid: Unique ID string (e.g. "AP/EAS/2026/10/371" or "AP/ANA/2026/4/83" — sequential number can be 1-4 digits)
 - state: full state or UT name
 - district: district name
 - disease: disease name exactly as written in the report
 - cases: integer — value from "No. of Cases" column (never null, use 0 if blank)
 - deaths: integer — value from "No. of Deaths" column (CRITICAL: use the actual number; 0 only when column is blank/zero; also check the description/comments text for phrases like "X death was reported" or "X deaths reported" as confirmation — if found, use that number)
 - startDate: "Date of Start of Outbreak" formatted as DD-MM-YYYY
+- reportDate: "Date of Reporting" formatted as DD-MM-YYYY (the SECOND date column; if only one date exists use startDate)
 - status: Current Status (e.g. "Under Surveillance", "Under Control")
 
 IMPORTANT RULES:
