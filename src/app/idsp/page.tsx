@@ -3,6 +3,7 @@ import { adminList } from "@/lib/firestore-admin";
 import type { IDSPOutbreak } from "@/lib/idspPDFParser";
 import Link from "next/link";
 import IDSPStateGrid, { type StateRow } from "@/components/IDSPStateGrid";
+import IDSPDiseaseBreakdown, { type DiseaseStatRow } from "@/components/IDSPDiseaseBreakdown";
 
 export const metadata: Metadata = {
   title: "IDSP Outbreak Surveillance | Vyasa",
@@ -78,6 +79,23 @@ export default async function IDSPPage() {
     diseaseMap.set(o.disease, d);
   }
   const diseaseBreakdown = [...diseaseMap.entries()].sort((a, b) => b[1].outbreaks - a[1].outbreaks).slice(0, 20);
+
+  // ── Per-disease state breakdown (for interactive drill-down) ───────────────
+  const diseaseStateMap = new Map<string, Map<string, { outbreaks: number; cases: number; deaths: number }>>();
+  for (const o of allOutbreaks) {
+    if (!diseaseStateMap.has(o.disease)) diseaseStateMap.set(o.disease, new Map());
+    const sm = diseaseStateMap.get(o.disease)!;
+    const prev = sm.get(o.state) ?? { outbreaks: 0, cases: 0, deaths: 0 };
+    prev.outbreaks++; prev.cases += o.cases ?? 0; prev.deaths += o.deaths ?? 0;
+    sm.set(o.state, prev);
+  }
+  const diseaseRows: DiseaseStatRow[] = diseaseBreakdown.map(([disease, stat]) => ({
+    disease,
+    ...stat,
+    states: [...(diseaseStateMap.get(disease) ?? new Map()).entries()]
+      .map(([state, s]) => ({ state, slug: toSlug(state), ...s }))
+      .sort((a, b) => b.outbreaks - a.outbreaks),
+  }));
 
   // ── State × Week matrix (raw weekly counts — NOT deduplicated) ─────────────
   // For the heat map we want "how many cases reported in this state in THIS WEEK's PDF"
@@ -259,30 +277,11 @@ export default async function IDSPPage() {
       {/* ── Disease Breakdown + State Breakdown ────────────────────────────── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))", gap: "1.25rem", marginBottom: "2.5rem" }}>
         <section>
-          <h2 className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#e2e8f0", marginBottom: "1rem" }}>
+          <h2 className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#e2e8f0", marginBottom: "0.4rem" }}>
             Disease Breakdown — {year} YTD
           </h2>
-          <div style={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "12px", overflow: "hidden" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
-              <thead>
-                <tr style={{ backgroundColor: "#0a1628" }}>
-                  {["Disease", "Outbreaks", "Cases", "Deaths"].map(h => (
-                    <th key={h} style={{ padding: "0.6rem 0.85rem", textAlign: "left", color: "#475569", fontWeight: 600 }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {diseaseBreakdown.map(([disease, stat], i) => (
-                  <tr key={disease} style={{ backgroundColor: i % 2 === 0 ? "#0f172a" : "#0a1020", borderTop: "1px solid #1e293b" }}>
-                    <td style={{ padding: "0.55rem 0.85rem", color: "#e2e8f0" }}>{disease}</td>
-                    <td style={{ padding: "0.55rem 0.85rem", color: "#94a3b8", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.outbreaks}</td>
-                    <td style={{ padding: "0.55rem 0.85rem", color: "#fb923c", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.cases.toLocaleString()}</td>
-                    <td style={{ padding: "0.55rem 0.85rem", color: stat.deaths > 0 ? "#ef4444" : "#475569", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.deaths}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <p style={{ fontSize: "0.72rem", color: "#475569", marginBottom: "1rem" }}>Click any disease to see affected states</p>
+          <IDSPDiseaseBreakdown rows={diseaseRows} />
         </section>
 
         <section>
