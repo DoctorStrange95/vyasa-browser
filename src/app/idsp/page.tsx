@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { adminList } from "@/lib/firestore-admin";
 import type { IDSPOutbreak } from "@/lib/idspPDFParser";
 import Link from "next/link";
+import IDSPStateGrid, { type StateRow } from "@/components/IDSPStateGrid";
 
 export const metadata: Metadata = {
   title: "IDSP Outbreak Surveillance | Vyasa",
@@ -9,7 +10,6 @@ export const metadata: Metadata = {
     "Year-to-date disease outbreak data from India's Integrated Disease Surveillance Programme (IDSP). Cumulative cases, deaths, and state-wise breakdown for researchers.",
 };
 
-// Revalidate every 6 hours
 export const revalidate = 21600;
 
 type WeekDoc = {
@@ -30,17 +30,18 @@ function ordinal(n: number) {
   return n + (s[(v - 20) % 10] ?? s[v] ?? s[0]);
 }
 
+function toSlug(name: string) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 export default async function IDSPPage() {
   const currentYear = new Date().getFullYear();
 
-  // Fetch all weekly snapshots
   let allDocs: WeekDoc[] = [];
   try {
     const raw = await adminList("idsp_weekly", 200);
     allDocs = (raw as WeekDoc[]).filter(d => /^\d{4}_w\d{2}$/.test(String(d._id)));
-  } catch {
-    // render empty state on error
-  }
+  } catch { /* render empty */ }
 
   const availableYears = [...new Set(allDocs.map(d => d.year ?? parseInt(String(d._id).slice(0, 4))))].sort((a, b) => b - a);
   const year = availableYears[0] ?? currentYear;
@@ -49,17 +50,16 @@ export default async function IDSPPage() {
     .filter(d => (d.year ?? parseInt(String(d._id).slice(0, 4))) === year)
     .sort((a, b) => (a.week ?? 0) - (b.week ?? 0));
 
-  // Deduplicate by UID — take highest-week occurrence (latest case count)
+  const weeksInOrder = yearDocs.map(d => d.week ?? parseInt(String(d._id).slice(6)));
+
+  // ── Deduplicate by UID for YTD totals ──────────────────────────────────────
   const uidWeekMap = new Map<string, number>();
   const latestByUid = new Map<string, IDSPOutbreak>();
   for (const doc of yearDocs) {
     const w = doc.week ?? 0;
     for (const o of doc.outbreaks ?? []) {
       const prevWeek = uidWeekMap.get(o.uid) ?? -1;
-      if (w > prevWeek) {
-        uidWeekMap.set(o.uid, w);
-        latestByUid.set(o.uid, o);
-      }
+      if (w > prevWeek) { uidWeekMap.set(o.uid, w); latestByUid.set(o.uid, o); }
     }
   }
   const allOutbreaks = [...latestByUid.values()];
@@ -70,50 +70,67 @@ export default async function IDSPPage() {
   const ytdStates   = new Set(allOutbreaks.map(o => o.state)).size;
   const weeksReported = yearDocs.length;
 
-  // Disease breakdown
+  // ── Disease breakdown (YTD, deduplicated) ──────────────────────────────────
   const diseaseMap = new Map<string, { outbreaks: number; cases: number; deaths: number }>();
   for (const o of allOutbreaks) {
     const d = diseaseMap.get(o.disease) ?? { outbreaks: 0, cases: 0, deaths: 0 };
-    d.outbreaks++;
-    d.cases  += o.cases ?? 0;
-    d.deaths += o.deaths ?? 0;
+    d.outbreaks++; d.cases += o.cases ?? 0; d.deaths += o.deaths ?? 0;
     diseaseMap.set(o.disease, d);
   }
-  const diseaseBreakdown = [...diseaseMap.entries()]
-    .sort((a, b) => b[1].outbreaks - a[1].outbreaks)
-    .slice(0, 20);
+  const diseaseBreakdown = [...diseaseMap.entries()].sort((a, b) => b[1].outbreaks - a[1].outbreaks).slice(0, 20);
 
-  // State breakdown
-  const stateMap = new Map<string, { outbreaks: number; cases: number; deaths: number; diseases: Set<string> }>();
-  for (const o of allOutbreaks) {
-    const s = stateMap.get(o.state) ?? { outbreaks: 0, cases: 0, deaths: 0, diseases: new Set() };
-    s.outbreaks++;
-    s.cases  += o.cases ?? 0;
-    s.deaths += o.deaths ?? 0;
-    s.diseases.add(o.disease);
-    stateMap.set(o.state, s);
+  // ── State × Week matrix (raw weekly counts — NOT deduplicated) ─────────────
+  // For the heat map we want "how many cases reported in this state in THIS WEEK's PDF"
+  // so we show genuine weekly activity, not cumulative YTD.
+  const stateRowMap = new Map<string, StateRow>();
+  for (const doc of yearDocs) {
+    const w = doc.week ?? 0;
+    const dr = doc.dateRange ?? "";
+    for (const o of doc.outbreaks ?? []) {
+      if (!stateRowMap.has(o.state)) {
+        stateRowMap.set(o.state, {
+          state: o.state,
+          slug: toSlug(o.state),
+          total: { outbreaks: 0, cases: 0, deaths: 0 },
+          byWeek: {},
+          diseases: [],
+        });
+      }
+      const row = stateRowMap.get(o.state)!;
+      if (!row.byWeek[w]) row.byWeek[w] = { outbreaks: 0, cases: 0, deaths: 0, dateRange: dr, diseases: [] };
+      row.byWeek[w].outbreaks++;
+      row.byWeek[w].cases  += o.cases ?? 0;
+      row.byWeek[w].deaths += o.deaths ?? 0;
+      if (!row.byWeek[w].diseases!.includes(o.disease)) row.byWeek[w].diseases!.push(o.disease);
+    }
   }
-  const stateBreakdown = [...stateMap.entries()]
-    .sort((a, b) => b[1].outbreaks - a[1].outbreaks);
+  // Compute per-state YTD totals from the deduplicated set
+  for (const o of allOutbreaks) {
+    const row = stateRowMap.get(o.state);
+    if (!row) continue;
+    row.total.outbreaks++;
+    row.total.cases  += o.cases ?? 0;
+    row.total.deaths += o.deaths ?? 0;
+    if (!row.diseases.includes(o.disease)) row.diseases.push(o.disease);
+  }
+  const stateRows: StateRow[] = [...stateRowMap.values()]
+    .sort((a, b) => b.total.outbreaks - a.total.outbreaks);
 
-  // Per-week trend
+  // ── Per-week snapshots for trend table ─────────────────────────────────────
   const weekSnapshots = yearDocs.map(doc => ({
-    week:           doc.week ?? parseInt(String(doc._id).slice(6)),
-    dateRange:      doc.dateRange ?? "",
-    outbreaks:      doc.totalOutbreaks ?? (doc.outbreaks?.length ?? 0),
-    cases:          doc.outbreaks?.reduce((s, o) => s + (o.cases ?? 0), 0) ?? 0,
-    deaths:         doc.outbreaks?.reduce((s, o) => s + (o.deaths ?? 0), 0) ?? 0,
-    reporting:      doc.reportingStates ?? 0,
-    pdfUrl:         doc.pdfUrl ?? "",
+    week:      doc.week ?? parseInt(String(doc._id).slice(6)),
+    dateRange: doc.dateRange ?? "",
+    outbreaks: doc.totalOutbreaks ?? (doc.outbreaks?.length ?? 0),
+    cases:     doc.outbreaks?.reduce((s, o) => s + (o.cases ?? 0), 0) ?? 0,
+    deaths:    doc.outbreaks?.reduce((s, o) => s + (o.deaths ?? 0), 0) ?? 0,
+    reporting: doc.reportingStates ?? 0,
+    pdfUrl:    doc.pdfUrl ?? "",
   }));
-
   const maxWeekCases = Math.max(...weekSnapshots.map(w => w.cases), 1);
-
-  const latestWeek = yearDocs[yearDocs.length - 1];
-  const latestWeekNum = latestWeek?.week ?? 0;
+  const latestWeekNum = yearDocs[yearDocs.length - 1]?.week ?? 0;
 
   return (
-    <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "2.5rem 1.5rem 6rem" }}>
+    <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "2.5rem 1.5rem 6rem" }}>
 
       {/* Header */}
       <div style={{ marginBottom: "2.5rem" }}>
@@ -130,23 +147,21 @@ export default async function IDSPPage() {
           <span style={{ fontSize: "0.72rem", color: "#475569" }}>
             Scraped weekly from{" "}
             <a href="https://idsp.mohfw.gov.in" target="_blank" rel="noopener noreferrer"
-              style={{ color: "#64748b", textDecoration: "underline" }}>
-              idsp.mohfw.gov.in
-            </a>
+              style={{ color: "#64748b", textDecoration: "underline" }}>idsp.mohfw.gov.in</a>
           </span>
         </div>
         <h1 className="font-display" style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)", fontWeight: 700, color: "#fff", marginBottom: "0.6rem" }}>
           IDSP Outbreak Surveillance
         </h1>
         <p style={{ fontSize: "0.92rem", color: "#94a3b8", lineHeight: 1.7, maxWidth: "640px" }}>
-          Year-to-date cumulative burden data from India&apos;s Integrated Disease Surveillance Programme.
-          Each outbreak is counted once using its latest reported case count.
-          Data covers {ordinal(weeksReported)} weeks of {year}.
+          Year-to-date cumulative burden from India&apos;s Integrated Disease Surveillance Programme.
+          Each outbreak counted once using its latest reported case count.
+          Covering {ordinal(weeksReported)} weeks of {year}.
         </p>
       </div>
 
       {/* YTD Summary Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.75rem", marginBottom: "2.5rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: "0.75rem", marginBottom: "2.5rem" }}>
         {[
           { label: "Unique Outbreaks", value: ytdOutbreaks.toLocaleString(), icon: "🦠", color: "#f97316" },
           { label: "Total Cases (YTD)", value: ytdCases.toLocaleString(), icon: "🧑‍⚕️", color: "#fb923c" },
@@ -167,16 +182,25 @@ export default async function IDSPPage() {
         ))}
       </div>
 
-      {/* Week-by-week trend */}
+      {/* ── All-States Heat Map ─────────────────────────────────────────────── */}
+      <section style={{ marginBottom: "2.5rem" }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: "0.75rem", marginBottom: "1rem" }}>
+          <h2 className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#e2e8f0" }}>
+            All States — Week-by-Week Trend
+          </h2>
+          <span style={{ fontSize: "0.72rem", color: "#475569" }}>
+            Click any state row to expand week-by-week detail
+          </span>
+        </div>
+        <IDSPStateGrid stateRows={stateRows} weeks={weeksInOrder} year={year} />
+      </section>
+
+      {/* ── Weekly trend table ─────────────────────────────────────────────── */}
       <section style={{ marginBottom: "2.5rem" }}>
         <h2 className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#e2e8f0", marginBottom: "1rem" }}>
-          Weekly Trend — {year}
+          Weekly Summary — {year}
         </h2>
-        <div style={{
-          backgroundColor: "#0f172a", border: "1px solid #1e293b",
-          borderRadius: "12px", overflow: "hidden",
-        }}>
-          {/* Mini bar chart */}
+        <div style={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "12px", overflow: "hidden" }}>
           <div style={{ padding: "1.25rem 1.5rem 0.5rem", borderBottom: "1px solid #1e293b" }}>
             <div style={{ display: "flex", alignItems: "flex-end", gap: "4px", height: "60px" }}>
               {weekSnapshots.map(w => {
@@ -184,26 +208,21 @@ export default async function IDSPPage() {
                 return (
                   <div key={w.week} title={`Week ${w.week}: ${w.cases.toLocaleString()} cases`} style={{
                     flex: 1, backgroundColor: w.week === latestWeekNum ? "#f97316" : "#1e3a5f",
-                    height: `${pct}%`, borderRadius: "3px 3px 0 0",
-                    minWidth: "4px", transition: "background 0.2s",
+                    height: `${pct}%`, borderRadius: "3px 3px 0 0", minWidth: "4px",
                   }} />
                 );
               })}
             </div>
             <div style={{ fontSize: "0.62rem", color: "#475569", marginTop: "0.3rem" }}>
-              Cases per week · orange = latest · {weeksReported} weeks shown
+              Cases per week · orange = latest
             </div>
           </div>
-
-          {/* Table */}
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
               <thead>
                 <tr style={{ backgroundColor: "#0a1628" }}>
                   {["Week", "Date Range", "Outbreaks", "Cases", "Deaths", "States", "PDF"].map(h => (
-                    <th key={h} style={{ padding: "0.65rem 1rem", textAlign: "left", color: "#475569", fontWeight: 600, whiteSpace: "nowrap" }}>
-                      {h}
-                    </th>
+                    <th key={h} style={{ padding: "0.65rem 1rem", textAlign: "left", color: "#475569", fontWeight: 600, whiteSpace: "nowrap" }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -214,7 +233,7 @@ export default async function IDSPPage() {
                     borderTop: "1px solid #1e293b",
                   }}>
                     <td style={{ padding: "0.6rem 1rem", color: w.week === latestWeekNum ? "#f97316" : "#94a3b8", fontWeight: 600, fontFamily: "'IBM Plex Mono', monospace" }}>
-                      {ordinal(w.week)}{w.week === latestWeekNum && <span style={{ fontSize: "0.6rem", color: "#f97316", marginLeft: "0.3rem" }}>●</span>}
+                      {ordinal(w.week)}{w.week === latestWeekNum && <span style={{ fontSize: "0.6rem", marginLeft: "0.3rem" }}>●</span>}
                     </td>
                     <td style={{ padding: "0.6rem 1rem", color: "#64748b", whiteSpace: "nowrap" }}>{w.dateRange || "—"}</td>
                     <td style={{ padding: "0.6rem 1rem", color: "#e2e8f0", fontFamily: "'IBM Plex Mono', monospace" }}>{w.outbreaks}</td>
@@ -237,17 +256,13 @@ export default async function IDSPPage() {
         </div>
       </section>
 
-      {/* Disease Breakdown */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", marginBottom: "2.5rem" }}>
-
+      {/* ── Disease Breakdown + State Breakdown ────────────────────────────── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))", gap: "1.25rem", marginBottom: "2.5rem" }}>
         <section>
           <h2 className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#e2e8f0", marginBottom: "1rem" }}>
             Disease Breakdown — {year} YTD
           </h2>
-          <div style={{
-            backgroundColor: "#0f172a", border: "1px solid #1e293b",
-            borderRadius: "12px", overflow: "hidden",
-          }}>
+          <div style={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "12px", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
               <thead>
                 <tr style={{ backgroundColor: "#0a1628" }}>
@@ -258,10 +273,7 @@ export default async function IDSPPage() {
               </thead>
               <tbody>
                 {diseaseBreakdown.map(([disease, stat], i) => (
-                  <tr key={disease} style={{
-                    backgroundColor: i % 2 === 0 ? "#0f172a" : "#0a1020",
-                    borderTop: "1px solid #1e293b",
-                  }}>
+                  <tr key={disease} style={{ backgroundColor: i % 2 === 0 ? "#0f172a" : "#0a1020", borderTop: "1px solid #1e293b" }}>
                     <td style={{ padding: "0.55rem 0.85rem", color: "#e2e8f0" }}>{disease}</td>
                     <td style={{ padding: "0.55rem 0.85rem", color: "#94a3b8", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.outbreaks}</td>
                     <td style={{ padding: "0.55rem 0.85rem", color: "#fb923c", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.cases.toLocaleString()}</td>
@@ -273,15 +285,11 @@ export default async function IDSPPage() {
           </div>
         </section>
 
-        {/* State Breakdown */}
         <section>
           <h2 className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#e2e8f0", marginBottom: "1rem" }}>
             State Burden — {year} YTD
           </h2>
-          <div style={{
-            backgroundColor: "#0f172a", border: "1px solid #1e293b",
-            borderRadius: "12px", overflow: "hidden",
-          }}>
+          <div style={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "12px", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.8rem" }}>
               <thead>
                 <tr style={{ backgroundColor: "#0a1628" }}>
@@ -291,41 +299,34 @@ export default async function IDSPPage() {
                 </tr>
               </thead>
               <tbody>
-                {stateBreakdown.map(([state, stat], i) => {
-                  const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-                  return (
-                    <tr key={state} style={{
-                      backgroundColor: i % 2 === 0 ? "#0f172a" : "#0a1020",
-                      borderTop: "1px solid #1e293b",
-                    }}>
-                      <td style={{ padding: "0.55rem 0.85rem" }}>
-                        <Link href={`/state/${slug}`} style={{ color: "#93c5fd", textDecoration: "none" }}>
-                          {state}
-                        </Link>
-                      </td>
-                      <td style={{ padding: "0.55rem 0.85rem", color: "#94a3b8", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.outbreaks}</td>
-                      <td style={{ padding: "0.55rem 0.85rem", color: "#fb923c", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.cases.toLocaleString()}</td>
-                      <td style={{ padding: "0.55rem 0.85rem", color: stat.deaths > 0 ? "#ef4444" : "#475569", fontFamily: "'IBM Plex Mono', monospace" }}>{stat.deaths}</td>
-                    </tr>
-                  );
-                })}
+                {stateRows.map(({ state, slug, total }, i) => (
+                  <tr key={state} style={{ backgroundColor: i % 2 === 0 ? "#0f172a" : "#0a1020", borderTop: "1px solid #1e293b" }}>
+                    <td style={{ padding: "0.55rem 0.85rem" }}>
+                      <Link href={`/state/${slug}`} style={{ color: "#93c5fd", textDecoration: "none" }}>{state}</Link>
+                    </td>
+                    <td style={{ padding: "0.55rem 0.85rem", color: "#94a3b8", fontFamily: "'IBM Plex Mono', monospace" }}>{total.outbreaks}</td>
+                    <td style={{ padding: "0.55rem 0.85rem", color: "#fb923c", fontFamily: "'IBM Plex Mono', monospace" }}>{total.cases.toLocaleString()}</td>
+                    <td style={{ padding: "0.55rem 0.85rem", color: total.deaths > 0 ? "#ef4444" : "#475569", fontFamily: "'IBM Plex Mono', monospace" }}>{total.deaths}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </section>
       </div>
 
-      {/* Methodology note */}
+      {/* Methodology */}
       <div style={{
         backgroundColor: "#0f172a", border: "1px solid #1e293b",
         borderRadius: "12px", padding: "1.25rem 1.5rem",
         fontSize: "0.78rem", color: "#475569", lineHeight: 1.7,
       }}>
-        <strong style={{ color: "#64748b" }}>Methodology:</strong> Weekly IDSP PDFs are scraped automatically from idsp.mohfw.gov.in.
-        Each outbreak carries a unique ID (e.g. AP/EAS/2026/05/123). To avoid double-counting,
-        the YTD figures above use each outbreak&apos;s <em>latest reported case count</em> — if the same outbreak
-        appears across multiple weeks, only its most recent entry is counted.
-        Weekly trend numbers show the raw cases reported in each week&apos;s PDF (cumulative totals for active outbreaks).
+        <strong style={{ color: "#64748b" }}>Methodology:</strong>{" "}
+        Weekly IDSP PDFs are scraped automatically from idsp.mohfw.gov.in.
+        Each outbreak carries a unique ID (e.g. AP/EAS/2026/05/123).
+        YTD totals use each outbreak&apos;s <em>latest reported case count</em> to avoid double-counting.
+        The heat map above shows the raw cases per state per week as reported in each week&apos;s PDF —
+        not deduplicated, so ongoing outbreaks appear in every week they are active.
         Data may lag the source by up to 7 days. Not for clinical use.
       </div>
     </div>
