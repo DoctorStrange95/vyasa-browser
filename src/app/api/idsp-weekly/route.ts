@@ -185,11 +185,16 @@ export async function GET(req: Request) {
     // Enrich outbreaks with Google News coverage
     const enrichedOutbreaks = await enrichWithNews(parsed.outbreaks ?? []);
 
+    const effectiveWeek = parsed.week  || scraped_week;
+    const effectiveYear = parsed.year  || scraped_year;
     const fresh: IDSPWeeklyMeta = {
       ...parsed,
       outbreaks: enrichedOutbreaks,
-      week:  parsed.week  || scraped_week,
-      year:  parsed.year  || scraped_year,
+      week: effectiveWeek,
+      year: effectiveYear,
+      // If PDF week extraction failed (week=0), the dateRange fallback says "Week 0, YYYY".
+      // Override it so the badge always shows the correct week number.
+      dateRange: parsed.week ? parsed.dateRange : `Week ${effectiveWeek}, ${effectiveYear}`,
       pdfUrl,
       fetchedAt: new Date().toISOString(),
     };
