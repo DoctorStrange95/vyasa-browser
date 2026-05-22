@@ -53,7 +53,10 @@ The report table has columns in this EXACT order:
 Unique ID | State/UT | District | Disease/Illness | No. of Cases | No. of Deaths | Date of Start | Date of Reporting | Current Status | Comments
 
 Extract ALL outbreak records and return a JSON array. Each element must have:
-- uid: Unique ID string (e.g. "AP/EAS/2026/10/371" or "AP/ANA/2026/4/83" — sequential number can be 1-4 digits)
+- uid: Unique ID string. Two formats exist:
+  * 5-segment: "STATE/DISTRICT/YEAR/WEEK/SEQUENTIAL" e.g. "AP/EAS/2026/10/371" or "AP/ANA/2026/4/83"
+  * 4-segment (Kerala): "STATE/DISTRICT/YEAR/SEQUENTIAL" e.g. "KL/ERN/2026/62" (no week segment)
+  Sequential number can be 1-4 digits in both formats.
 - state: full state or UT name
 - district: district name
 - disease: disease name exactly as written in the report
@@ -141,6 +144,10 @@ const DISEASES = [
   "Typhoid",
   "Fever with Rash",
   "Fever with rash",
+  "Nipah Virus",
+  "Meningococcal Meningitis",
+  "Dysentery",
+  "Dysentry",
   "Fever",
 ];
 
@@ -216,7 +223,8 @@ function extractDisease(text: string): { disease: string; before: string; after:
 }
 
 function regexParseOutbreaks(rawText: string, week: number, year: number): IDSPOutbreak[] {
-  const UID_RE = /\b([A-Z]{2}\/[A-Z]{2,6}\/\d{4}\/\d{1,2}\/\d{1,4})\b/g;
+  // 5-segment first (STATE/DISTRICT/YEAR/WEEK/SEQ), then 4-segment Kerala style (STATE/DISTRICT/YEAR/SEQ)
+  const UID_RE = /\b([A-Z]{2}\/[A-Z]{2,6}\/\d{4}\/\d{1,2}\/\d{1,4}|[A-Z]{2}\/[A-Z]{2,6}\/\d{4}\/\d{1,4})\b/g;
   const matches: { uid: string; index: number }[] = [];
   let m: RegExpExecArray | null;
   while ((m = UID_RE.exec(rawText)) !== null) {
@@ -250,10 +258,13 @@ function regexParseOutbreaks(rawText: string, week: number, year: number): IDSPO
     const statusM = dis.after.match(/(Under Surveillance|Under Investigation|Ongoing|Closed|Active)/i);
     const status = statusM ? statusM[1] : "Under Surveillance";
     const parts = uid.split("/");
+    // 5-segment UIDs have week in parts[3]; 4-segment (Kerala) omit week — use the PDF's week
+    const uidWeek = parts.length === 5 ? parseInt(parts[3]) : week;
+    const uidYear = parseInt(parts[2] ?? String(year));
     return {
       uid, state, district, disease: dis.disease, cases, deaths, startDate, reportDate, status,
-      week: parseInt(parts[3] ?? String(week)),
-      year: parseInt(parts[2] ?? String(year)),
+      week: uidWeek,
+      year: uidYear,
     } as IDSPOutbreak;
   }).filter(Boolean) as IDSPOutbreak[];
 }
