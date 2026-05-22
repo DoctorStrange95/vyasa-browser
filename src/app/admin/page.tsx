@@ -4,6 +4,7 @@ import Link from "next/link";
 import AdminLogout from "./AdminLogout";
 import AdminRefreshButton from "./AdminRefreshButton";
 import AdminPushSender from "./AdminPushSender";
+import AdminIDSPBackfill from "./AdminIDSPBackfill";
 import VyasaLogo from "@/components/VyasaLogo";
 import { getAdminDb } from "@/lib/firestore-admin";
 import { readFile } from "fs/promises";
@@ -175,6 +176,7 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
+        <AdminIDSPBackfill />
         <AdminPushSender />
       </div>
     </div>
