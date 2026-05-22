@@ -47,18 +47,28 @@ async function parseWithGroq(text: string, week: number, year: number): Promise<
   // Groq context limit: send up to 28,000 chars
   const snippet = relevant.slice(0, 28000);
 
-  const prompt = `Extract all disease outbreak records from this IDSP Weekly Outbreak Report text.
-Return ONLY a valid JSON array. Each element must have these exact fields:
-- uid: the unique ID string (format like AP/EAS/2026/10/371)
-- state: full state name
-- district: district name
-- disease: disease name exactly as written
-- cases: integer number of cases
-- deaths: integer number of deaths
-- startDate: start date as DD-MM-YYYY string
-- status: current status (e.g. "Under Surveillance")
+  const prompt = `You are extracting outbreak records from an IDSP (Integrated Disease Surveillance Programme) Weekly Outbreak Report.
 
-Return [] if no outbreaks found. No markdown, no explanation, just the JSON array.
+The report table has columns in this EXACT order:
+Unique ID | State/UT | District | Disease/Illness | No. of Cases | No. of Deaths | Date of Start | Date of Reporting | Current Status | Comments
+
+Extract ALL outbreak records and return a JSON array. Each element must have:
+- uid: Unique ID string (e.g. "AP/EAS/2026/10/371")
+- state: full state or UT name
+- district: district name
+- disease: disease name exactly as written in the report
+- cases: integer — value from "No. of Cases" column (never null, use 0 if blank)
+- deaths: integer — value from "No. of Deaths" column (CRITICAL: use the actual number; 0 only when column is blank/zero; also check the description/comments text for phrases like "X death was reported" or "X deaths reported" as confirmation — if found, use that number)
+- startDate: "Date of Start of Outbreak" formatted as DD-MM-YYYY
+- status: Current Status (e.g. "Under Surveillance", "Under Control")
+
+IMPORTANT RULES:
+1. deaths MUST always be an integer, never null or undefined
+2. The "No. of Deaths" column comes IMMEDIATELY AFTER "No. of Cases" — do not confuse it with dates
+3. If the description says "1 death was reported" or "X deaths reported", set deaths to that number
+4. A single digit like "1" between the cases count and the date IS the deaths count
+
+Return [] if no outbreaks found. No markdown, no explanation, just the raw JSON array.
 
 TEXT:
 ${snippet}`;
@@ -126,7 +136,10 @@ const DISEASES = [
   "Measles",
   "Mpox",
   "Mumps",
+  "Shigellosis",
   "Typhoid",
+  "Fever with Rash",
+  "Fever with rash",
   "Fever",
 ];
 
@@ -217,9 +230,19 @@ function regexParseOutbreaks(rawText: string, week: number, year: number): IDSPO
 
     const { state, rest: districtRaw } = extractState(dis.before);
     const district = districtRaw.replace(/^[,\s]+/, "").trim();
-    const numMatch = dis.after.match(/(\d+)\s+(\d+)/);
-    const cases  = numMatch ? parseInt(numMatch[1]) : 0;
-    const deaths = numMatch ? parseInt(numMatch[2]) : 0;
+    // Match cases and deaths: both are integers right after the disease name,
+    // before the first date (DD-MM-YYYY). Deaths immediately follows cases.
+    const numMatch = dis.after.match(/^[\s,]*(\d+)[\s,]+(\d+)(?=[\s,]+\d{2}-\d{2}-\d{4})/);
+    const numMatchFallback = dis.after.match(/(\d+)\s+(\d+)/);
+    const cases  = numMatch ? parseInt(numMatch[1]) : (numMatchFallback ? parseInt(numMatchFallback[1]) : 0);
+    let   deaths = numMatch ? parseInt(numMatch[2]) : (numMatchFallback ? parseInt(numMatchFallback[2]) : 0);
+    // Cross-check: scan description text for explicit death mentions
+    if (deaths === 0) {
+      const deathMention = chunk.match(/(\d+)\s+death(?:s)?\s+(?:was|were)\s+reported/i)
+                        ?? chunk.match(/(\d+)\s+(?:person|persons|patient|people)\s+died/i)
+                        ?? chunk.match(/death[^.]*?(\d+)\s*(?:year|yr)/i);
+      if (deathMention) deaths = parseInt(deathMention[1]);
+    }
     const dates = [...dis.after.matchAll(/(\d{2}-\d{2}-\d{4})/g)].map(x => x[1]);
     const startDate  = dates[0] ?? "";
     const reportDate = dates[1] ?? dates[0] ?? "";

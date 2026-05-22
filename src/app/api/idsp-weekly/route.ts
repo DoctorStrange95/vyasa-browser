@@ -6,7 +6,7 @@ import type { IDSPParsedReport, IDSPOutbreak, IDSPNewsLink } from "@/lib/idspPDF
 
 const IDSP_LISTING = "https://idsp.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3689";
 const CACHE_COL    = "idsp_weekly";
-const CACHE_ID     = "latest_v3";  // bumped to bust stale 2016 cache
+const CACHE_ID     = "latest_v5";  // bumped to bust cache after untitled-link scraper fix
 const TTL_HOURS    = 24 * 7;
 
 export interface IDSPWeeklyMeta extends IDSPParsedReport {
@@ -69,7 +69,9 @@ async function enrichWithNews(outbreaks: IDSPOutbreak[]): Promise<IDSPOutbreak[]
   return outbreaks.map(o => ({ ...o, newsLinks: newsMap.get(`${o.disease}||${o.state}`) ?? [] }));
 }
 
-/** Pick the PDF with the highest week for the most recent year using <a title="Nth week of YYYY"> */
+/** Pick the PDF with the highest week for the most recent year.
+ *  Handles both titled links (title="Nth week of YYYY") and untitled links
+ *  where IDSP sometimes omits the title attribute on the most recent weeks. */
 async function scrapeLatestPdfUrl(): Promise<{ url: string; week: number; year: number }> {
   const html = await fetch(IDSP_LISTING, {
     headers: { "User-Agent": "Mozilla/5.0 (compatible; VyasaHealth/1.0)" },
@@ -77,21 +79,42 @@ async function scrapeLatestPdfUrl(): Promise<{ url: string; week: number; year: 
     next: { revalidate: 0 },
   }).then(r => r.text());
 
-  // Each link has title="Nth week of YYYY" or "Nth Week of YYYY"
-  const re = /<a[^>]*title="(\d{1,2})(?:st|nd|rd|th)\s+[Ww]eek\s+of\s+(\d{4})"[^>]*href="([^"]+\.pdf)"[^>]*>/gi;
   const entries: { week: number; year: number; url: string }[] = [];
+
+  // Match every anchor with a .pdf href — capture full opening tag + link text
+  const linkRe = /(<a\s[^>]*href="([^"]+\.pdf)"[^>]*>)([^<]*)<\/a>/gi;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(html)) !== null) {
-    entries.push({ week: parseInt(m[1]), year: parseInt(m[2]), url: m[3] });
+  while ((m = linkRe.exec(html)) !== null) {
+    const tag = m[1];
+    const rawUrl = m[2];
+    const linkText = m[3].replace(/&nbsp;/gi, "").trim();
+    const url = rawUrl.startsWith("http") ? rawUrl : `https://idsp.mohfw.gov.in${rawUrl}`;
+
+    // Method 1: title attribute carries week+year reliably
+    const titleM = tag.match(/title="(\d{1,2})(?:st|nd|rd|th)\s+[Ww]eek\s+of\s+(\d{4})"/i);
+    if (titleM) {
+      entries.push({ week: parseInt(titleM[1]), year: parseInt(titleM[2]), url });
+      continue;
+    }
+
+    // Method 2: no title — infer week from link text ("14th", "15th …") and year
+    // from the nearest <strong>YYYY</strong> heading that precedes this link
+    const textM = linkText.match(/^(\d{1,2})(?:st|nd|rd|th)$/i);
+    if (textM) {
+      const week = parseInt(textM[1]);
+      const before = html.slice(0, m.index);
+      const yearMatches = [...before.matchAll(/<strong>(\d{4})<\/strong>/g)];
+      const year = yearMatches.length > 0 ? parseInt(yearMatches[yearMatches.length - 1][1]) : 0;
+      if (year > 2000) entries.push({ week, year, url });
+    }
   }
 
-  if (entries.length === 0) throw new Error("No titled PDF links found on IDSP listing page");
+  if (entries.length === 0) throw new Error("No PDF links found on IDSP listing page");
 
   // Sort: highest year first, then highest week
   entries.sort((a, b) => b.year - a.year || b.week - a.week);
   const best = entries[0];
-  const url = best.url.startsWith("http") ? best.url : `https://idsp.mohfw.gov.in${best.url}`;
-  return { url, week: best.week, year: best.year };
+  return { url: best.url, week: best.week, year: best.year };
 }
 
 async function sendOutbreakPush(report: IDSPWeeklyMeta) {
