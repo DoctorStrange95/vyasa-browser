@@ -6,7 +6,7 @@ import type { IDSPParsedReport, IDSPOutbreak, IDSPNewsLink } from "@/lib/idspPDF
 
 const IDSP_LISTING = "https://idsp.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3689";
 const CACHE_COL    = "idsp_weekly";
-const CACHE_ID     = "latest_v5";  // bumped to bust cache after untitled-link scraper fix
+const CACHE_ID     = "latest_v6";  // bumped to bust cache after dateRange Week-0 fix
 const TTL_HOURS    = 24 * 7;
 
 export interface IDSPWeeklyMeta extends IDSPParsedReport {

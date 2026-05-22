@@ -56,7 +56,7 @@ function normalizeStateName(name: string): string {
 
 async function getIDSPWeeklyForState(stateName: string): Promise<{ outbreaks: OutbreakAlert[]; weekLabel: string }> {
   try {
-    const data = await fsGet("idsp_weekly", "latest_v5") as { week: number; year: number; outbreaks: IDSPOutbreak[] } | null;
+    const data = await fsGet("idsp_weekly", "latest_v6") as { week: number; year: number; outbreaks: IDSPOutbreak[] } | null;
     if (!data?.outbreaks?.length) return { outbreaks: [], weekLabel: "" };
     const norm = normalizeStateName(stateName);
     const normWords = norm.split(/\s+/).filter(w => w.length > 2);

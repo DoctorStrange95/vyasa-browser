@@ -215,15 +215,14 @@ export default function IDSPWeeklyReport() {
             }}>
             📥 Official PDF
           </a>
-          <a href="https://idsp.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3689"
-            target="_blank" rel="noopener noreferrer"
+          <Link href="/idsp"
             style={{
               backgroundColor: "#0f2040", border: "1px solid #1e3a5f", color: "#94a3b8",
               borderRadius: "8px", padding: "0.55rem 1.1rem",
               fontSize: "0.8rem", fontWeight: 600, textDecoration: "none",
             }}>
             All Reports ↗
-          </a>
+          </Link>
         </div>
 
         {/* Push notification opt-in */}

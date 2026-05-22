@@ -7,7 +7,7 @@ const IDSP_TTL_HOURS = 24 * 7;
 
 async function getIDSPHistory(req: Request) {
   // Refresh latest if stale before listing history
-  const cached = await fsGet("idsp_weekly", "latest_v5");
+  const cached = await fsGet("idsp_weekly", "latest_v6");
   const fetchedAt = cached?.fetchedAt as string | undefined;
   const ageHours = fetchedAt ? (Date.now() - new Date(fetchedAt).getTime()) / 3_600_000 : Infinity;
   if (ageHours >= IDSP_TTL_HOURS) {
