@@ -6,7 +6,10 @@ import IDSPWeeklyReport from "@/components/IDSPWeeklyReport";
 import StateTable from "@/components/StateTable";
 import JsonLd from "@/components/JsonLd";
 import HomeSearch from "@/components/HomeSearch";
+import DoctorDirectory from "@/components/DoctorDirectory";
 import states from "@/data/states.json";
+
+const PORTAL = "https://vyasa-health-os.pages.dev";
 
 export const metadata: Metadata = {
   title: "India's Public Health Transparency Platform",
@@ -305,6 +308,101 @@ export default function HomePage() {
                 <Link href="/contribute" style={{ backgroundColor: "#0d9488", color: "#fff", padding: "0.65rem 1.5rem", borderRadius: "8px", textDecoration: "none", fontSize: "0.88rem", fontWeight: 700, flexShrink: 0 }}>
                   Submit Data →
                 </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* ── DOCTOR DIRECTORY ────────────────────────────────── */}
+          <section id="sec-doctors" className="home-section" style={{ borderBottom: "1px solid #1e3a5f", backgroundColor: "#060e1c" }}>
+            <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+              {/* Section hero */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "1.75rem" }}>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#0d9488", display: "inline-block", animation: "pulseGlow 2s infinite" }} />
+                    <span style={{ fontSize: "0.68rem", color: "#2dd4bf", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                      Live Doctor Directory
+                    </span>
+                  </div>
+                  <h2 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)", fontWeight: 800, color: "#fff", lineHeight: 1.15, margin: 0, letterSpacing: "-0.02em" }}>
+                    Find & Book a Doctor<br />
+                    <span style={{ color: "#0d9488" }}>Anywhere in India</span>
+                  </h2>
+                  <p style={{ fontSize: "0.92rem", color: "#64748b", marginTop: "0.5rem", lineHeight: 1.7, maxWidth: 540 }}>
+                    Browse verified doctors listed on Vyasa Health OS — search by state, district, city or specialty.
+                    Every profile has live slot availability. Book directly from this page.
+                  </p>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", alignItems: "flex-start" }}>
+                  <a href={`${PORTAL}/register`} target="_blank" rel="noopener noreferrer"
+                    style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#0f2040", border: "1px solid #0d948850", color: "#2dd4bf", borderRadius: 9, padding: "0.6rem 1.1rem", fontSize: "0.82rem", fontWeight: 700, textDecoration: "none" }}>
+                    👨‍⚕️ Are you a doctor? Get listed →
+                  </a>
+                  <span style={{ fontSize: "0.68rem", color: "#334155" }}>Free · Takes 2 minutes · Instant booking page</span>
+                </div>
+              </div>
+
+              {/* Stats bar */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
+                {[
+                  { icon: "🩺", label: "Instant Booking", desc: "Select a slot, confirm in 30 seconds" },
+                  { icon: "📍", label: "State/City/District", desc: "Filter doctors near you" },
+                  { icon: "🔒", label: "Verified Doctors", desc: "MCI/NMC registration confirmed" },
+                  { icon: "📱", label: "WhatsApp & QR", desc: "Share or scan — no app needed" },
+                ].map(f => (
+                  <div key={f.label} style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "#080f1e", border: "1px solid #1e3a5f", borderRadius: 8, padding: "0.5rem 0.85rem", flex: "1 1 180px" }}>
+                    <span style={{ fontSize: "1.1rem" }}>{f.icon}</span>
+                    <div>
+                      <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#e2e8f0" }}>{f.label}</div>
+                      <div style={{ fontSize: "0.67rem", color: "#475569" }}>{f.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* The directory component */}
+              <DoctorDirectory />
+            </div>
+          </section>
+
+          {/* ── FOR DOCTORS — PORTAL CTA ────────────────────────── */}
+          <section id="sec-doctor-portal" style={{ borderBottom: "1px solid #1e3a5f", background: "linear-gradient(135deg, #060e1c 0%, #0a1628 50%, #060e1c 100%)" }}>
+            <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+              <div style={{ background: "linear-gradient(135deg, #0a1628, #0f2040)", border: "1px solid #1B4F8A50", borderRadius: 18, padding: "2rem 2.5rem", display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center", justifyContent: "space-between", position: "relative", overflow: "hidden" }}>
+                {/* Glow */}
+                <div style={{ position: "absolute", top: -60, right: 80, width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, #1B4F8A20 0%, transparent 70%)", pointerEvents: "none" }} />
+                <div style={{ flex: 1, minWidth: 260, position: "relative" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+                    <span style={{ fontSize: "0.62rem", background: "#1B4F8A30", color: "#93c5fd", border: "1px solid #1B4F8A50", borderRadius: 4, padding: "0.15rem 0.5rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>For Doctors</span>
+                  </div>
+                  <h2 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#fff", marginBottom: "0.5rem", lineHeight: 1.25 }}>
+                    Your clinic.&nbsp;Your booking link.<br />
+                    <span style={{ color: "#2dd4bf" }}>Zero commission.</span>
+                  </h2>
+                  <p style={{ fontSize: "0.85rem", color: "#64748b", lineHeight: 1.75, maxWidth: 500, margin: 0 }}>
+                    Join Vyasa Health OS as a doctor. Get a personal booking page (vyasaa.com/dr/your-name),
+                    a QR code for your visiting card, slot-based appointment management,
+                    and a full HMIS — prescriptions, OPD queue, billing, lab orders and more.
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem", marginTop: "1rem" }}>
+                    {["📄 Digital prescriptions", "📅 Slot-based booking", "📱 Patient-facing public page", "🔲 QR code included", "🏥 Multi-clinic support", "💰 No commission"].map(f => (
+                      <span key={f} style={{ fontSize: "0.72rem", background: "#0f2040", border: "1px solid #1e3a5f", color: "#94a3b8", borderRadius: 6, padding: "0.25rem 0.65rem" }}>{f}</span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "center", flexShrink: 0 }}>
+                  <a href={`${PORTAL}/register`} target="_blank" rel="noopener noreferrer"
+                    style={{ background: "#0d9488", color: "#fff", padding: "0.9rem 2rem", borderRadius: 11, textDecoration: "none", fontSize: "0.95rem", fontWeight: 800, display: "block", textAlign: "center", minWidth: 200, boxShadow: "0 4px 20px #0d948840" }}>
+                    Register as a Doctor →
+                  </a>
+                  <a href={`${PORTAL}/login`} target="_blank" rel="noopener noreferrer"
+                    style={{ background: "none", border: "1px solid #1e3a5f", color: "#64748b", padding: "0.7rem 2rem", borderRadius: 11, textDecoration: "none", fontSize: "0.85rem", fontWeight: 600, display: "block", textAlign: "center", minWidth: 200 }}>
+                    Already a member? Sign in →
+                  </a>
+                  <span style={{ fontSize: "0.65rem", color: "#334155", textAlign: "center" }}>
+                    Free to start · No credit card needed
+                  </span>
+                </div>
               </div>
             </div>
           </section>

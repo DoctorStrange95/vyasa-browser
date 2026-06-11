@@ -112,14 +112,16 @@ export default function Header({ user, uiConfig }: { user?: HeaderUser | null; u
 
           {/* For professionals only */}
           {showForDoctors && (
-            <Link
-              href="/join#join-form"
+            <a
+              href="https://vyasa-health-os.pages.dev/register"
+              target="_blank"
+              rel="noopener noreferrer"
               className="header-join-btn"
-              title="Join Vyasa Health Platform — for healthcare professionals"
-              style={{ backgroundColor: "#0d948815", border: "1px solid #0d948840", color: "#64748b", padding: "0.55rem 0.9rem", borderRadius: "6px", textDecoration: "none", fontSize: "0.82rem", fontWeight: 500, minHeight: "44px", display: "inline-flex", alignItems: "center" }}
+              title="Join Vyasa Health OS — for doctors"
+              style={{ backgroundColor: "#0d9488", border: "1px solid #0d948870", color: "#fff", padding: "0.55rem 1rem", borderRadius: "6px", textDecoration: "none", fontSize: "0.82rem", fontWeight: 700, minHeight: "44px", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
             >
-              For Doctors
-            </Link>
+              👨‍⚕️ For Doctors
+            </a>
           )}
 
           {user ? (
