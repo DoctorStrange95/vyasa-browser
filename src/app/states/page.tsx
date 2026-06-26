@@ -147,6 +147,46 @@ export default function StatesPage() {
         <span>Ranked by composite health score (IMR, vaccination, institutional births, stunting, anaemia)</span>
       </div>
 
+      {/* ── Logical scoring methodology (rule-based, not AI) ── */}
+      <details style={{ ...card, marginTop: "1.25rem" }}>
+        <summary style={{ cursor: "pointer", listStyle: "none", padding: "0.9rem 1.1rem", fontWeight: 700, color: "#e2e8f0", fontSize: "0.92rem" }}>
+          ⚖️ How the Vyasa Health Score is calculated <span style={{ color: "#64748b", fontWeight: 400, fontSize: "0.78rem" }}>(transparent formula — not AI)</span>
+        </summary>
+        <div style={{ padding: "0 1.1rem 1.1rem", fontSize: "0.88rem", color: "#94a3b8", lineHeight: 1.75 }}>
+          <p style={{ marginTop: 0 }}>
+            The score is a <strong style={{ color: "#cbd5e1" }}>fixed, rule-based 0–100 composite</strong> — a deterministic weighted average of five
+            official indicators. It is <strong style={{ color: "#cbd5e1" }}>not an AI, machine-learning or black-box model</strong>: the same inputs always
+            produce the same score, and anyone can reproduce it from the formula below. Each indicator is first normalised to a 0–100 scale (higher = better),
+            then combined with these weights:
+          </p>
+          <div style={tableWrap}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.84rem" }}>
+              <thead><tr><th style={{ ...th, textAlign: "left" }}>Indicator</th><th style={th}>Source</th><th style={th}>Weight</th><th style={{ ...th, textAlign: "left" }}>Normalisation</th></tr></thead>
+              <tbody>
+                {[
+                  ["Infant Mortality Rate", "SRS (RGI)", "30%", "100 − (IMR ÷ 55 × 100) — lower IMR scores higher"],
+                  ["Full child immunisation", "NFHS-6", "25%", "used directly (already 0–100, higher better)"],
+                  ["Institutional births", "NFHS-6", "20%", "used directly (higher better)"],
+                  ["Child stunting", "NFHS-6", "15%", "100 − (stunting ÷ 50 × 100) — lower stunting scores higher"],
+                  ["Women's anaemia", "NFHS-5", "10%", "100 − (anaemia ÷ 75 × 100) — lower anaemia scores higher"],
+                ].map((row) => (
+                  <tr key={row[0]} style={{ borderTop: "1px solid #16243d" }}>
+                    <td style={{ ...td, textAlign: "left", color: "#cbd5e1" }}>{row[0]}</td>
+                    <td style={{ ...td, color: "#64748b" }}>{row[1]}</td>
+                    <td style={{ ...td, color: UP, fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ ...td, textAlign: "left", color: "#64748b", fontSize: "0.78rem" }}>{row[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: "0.82rem", color: "#64748b", marginBottom: 0 }}>
+            Score = 0.30·IMR* + 0.25·Immunisation + 0.20·Institutional&nbsp;births + 0.15·Stunting* + 0.10·Anaemia*, rounded to the nearest whole number
+            (* = normalised so that a lower raw value gives a higher score). Anaemia stays on NFHS-5 because it is not reported in the NFHS-6 fact sheet.
+          </p>
+        </div>
+      </details>
+
       <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem", marginTop: "1.5rem" }}>
         {ranked.map(({ s, sc }, idx) => {
           const rank = idx + 1;
@@ -161,7 +201,6 @@ export default function StatesPage() {
                   {s.nfhsRound === 5 && <span style={tag}>NFHS-5 only</span>}
                 </span>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.9rem", flexShrink: 0 }}>
-                  {/* quick deltas */}
                   {r.filter((x) => x.d != null).slice(0, 3).map((x) => (
                     <span key={x.label} title={x.label} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: "0.74rem", color: x.improved ? UP : DOWN }}>
                       {x.d! > 0 ? "▲" : "▼"}{x.d! > 0 ? "+" : ""}{x.d}

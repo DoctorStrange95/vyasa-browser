@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HealthTicker from "@/components/HealthTicker";
-import PHIntelligenceFeed from "@/components/PHIntelligenceFeed";
 import IDSPWeeklyReport from "@/components/IDSPWeeklyReport";
 import StateTable from "@/components/StateTable";
 import JsonLd from "@/components/JsonLd";
@@ -12,9 +11,14 @@ import states from "@/data/states.json";
 const PORTAL = "https://app.vyasaa.com";
 
 export const metadata: Metadata = {
-  title: "India's Public Health Transparency Platform",
+  title: "India's Public Health Transparency Platform | NFHS-6 Data & NFHS-5 vs 6",
   description:
-    "District-level public health data for every Indian state and UT — infant mortality, vaccination, IDSP disease outbreaks, hospital infrastructure, nutrition and air quality. NFHS-6 · SRS 2023 · MoHFW.",
+    "NFHS-6 (2023-24) data and full NFHS-5 vs NFHS-6 comparison for India and every state/UT — vaccination, stunting, fertility, maternal care and NCDs — plus district-level infant mortality, disease outbreaks and hospital infrastructure. SRS 2023 · MoHFW.",
+  keywords: [
+    "NFHS-6 data", "NFHS-6 2023-24", "NFHS-5 vs NFHS-6", "NFHS 5 vs 6", "NFHS-6 India",
+    "NFHS-6 state wise data", "National Family Health Survey 6 data", "NFHS-6 vs NFHS-5 comparison",
+    "India public health data", "infant mortality rate India state wise", "IDSP outbreak report India",
+  ],
   alternates: { canonical: "https://www.vyasaa.com" },
 };
 
@@ -119,51 +123,28 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* ── FIND NEARBY FACILITIES ──────────────────────────── */}
-          <section id="sec-facilities" className="home-section" style={{ backgroundColor: "#0a1628", borderBottom: "1px solid #1e3a5f" }}>
+          {/* ── NFHS-5 vs NFHS-6 RESEARCH BANNER ──────────────────── */}
+          <section id="sec-nfhs" className="home-section" style={{ backgroundColor: "#0a1628", borderBottom: "1px solid #1e3a5f" }}>
             <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "1.5rem" }}>
-              <div className="facility-section-inner" style={{ backgroundColor: "#080f1e", border: "1px solid #0d948850", borderRadius: "14px", padding: "1.5rem 2rem", display: "flex", flexWrap: "wrap", gap: "1.25rem", alignItems: "center" }}>
-                <div style={{ flex: 1, minWidth: "200px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem" }}>
-                    <span style={{ fontSize: "1.5rem" }}>🏥</span>
-                    <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>Find Nearby Health Facilities</span>
-                    <span style={{ fontSize: "0.7rem", backgroundColor: "#0d948820", color: "#2dd4bf", border: "1px solid #0d948840", borderRadius: "4px", padding: "0.2rem 0.55rem", fontFamily: "monospace", fontWeight: 600 }}>GPS-enabled</span>
+              <div style={{ background: "linear-gradient(135deg, #062e2b 0%, #0a1628 60%)", border: "1px solid #0d948855", borderRadius: "14px", padding: "1.5rem 2rem", display: "flex", flexWrap: "wrap", gap: "1.25rem", alignItems: "center" }}>
+                <div style={{ flex: 1, minWidth: "240px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: "1.4rem" }}>📊</span>
+                    <span style={{ fontSize: "1.15rem", fontWeight: 800, color: "#fff" }}>NFHS-6 (2023-24) vs NFHS-5</span>
+                    <span style={{ fontSize: "0.7rem", backgroundColor: "#0d948820", color: "#2dd4bf", border: "1px solid #0d948840", borderRadius: "4px", padding: "0.2rem 0.55rem", fontFamily: "monospace", fontWeight: 600 }}>NEW · for researchers</span>
                   </div>
-                  <p style={{ fontSize: "0.88rem", color: "#64748b", margin: 0, lineHeight: 1.65 }}>
-                    Instantly locate PHC/Sub-Centres, CHC/District Hospitals, doctors, pharmacies, diagnostic labs, blood banks, ambulances & anganwadi centres near you.
+                  <p style={{ fontSize: "0.9rem", color: "#94a3b8", margin: 0, lineHeight: 1.65 }}>
+                    Full India &amp; state-wise comparison of the latest National Family Health Survey — vaccination, stunting, fertility, maternal care and NCDs, with the change from NFHS-5 and a trend analysis for every state and UT.
                   </p>
                 </div>
-                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                  {[
-                    { icon: "🏥", label: "Hospital" }, { icon: "🏛️", label: "PHC" }, { icon: "🏨", label: "CHC" },
-                    { icon: "👨‍⚕️", label: "Doctor" }, { icon: "💊", label: "Pharmacy" }, { icon: "🩸", label: "Blood Bank" },
-                  ].map(f => (
-                    <span key={f.label} style={{ fontSize: "0.78rem", backgroundColor: "#0f2040", border: "1px solid #1e3a5f", color: "#94a3b8", borderRadius: "6px", padding: "0.35rem 0.75rem" }}>
-                      {f.icon} {f.label}
-                    </span>
-                  ))}
+                <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", flexShrink: 0 }}>
+                  <a href="/nfhs-6" style={{ backgroundColor: "#0d9488", color: "#fff", borderRadius: "9px", padding: "0.7rem 1.4rem", fontSize: "0.88rem", fontWeight: 700, textDecoration: "none" }}>India analysis →</a>
+                  <a href="/states" style={{ background: "#0f2040", border: "1px solid #1e3a5f", color: "#cbd5e1", borderRadius: "9px", padding: "0.7rem 1.4rem", fontSize: "0.88rem", fontWeight: 700, textDecoration: "none" }}>State comparison →</a>
                 </div>
-                <button
-                  id="open-facility-drawer"
-                  style={{ backgroundColor: "#0d9488", color: "#fff", border: "none", borderRadius: "9px", padding: "0.75rem 1.75rem", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer", flexShrink: 0, fontFamily: "inherit" }}
-                >
-                  🔍 Search Nearby →
-                </button>
               </div>
             </div>
           </section>
 
-          {/* ── HEALTH INTELLIGENCE FEED ────────────────────────── */}
-          <section id="sec-intel" className="home-section" style={{ borderBottom: "1px solid #1e3a5f" }}>
-            <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "2rem 1.5rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
-                <span style={{ fontSize: "1rem" }}>📡</span>
-                <h2 className="font-display" style={{ fontSize: "1.3rem", fontWeight: 700, color: "#fff" }}>Health Intelligence Feed</h2>
-                <span style={{ fontSize: "0.7rem", backgroundColor: "#0d948820", color: "#2dd4bf", border: "1px solid #0d948840", borderRadius: "4px", padding: "0.1rem 0.4rem", fontFamily: "monospace" }}>Live · 13 sources</span>
-              </div>
-              <PHIntelligenceFeed maxItems={4} />
-            </div>
-          </section>
 
           {/* ── IDSP WEEKLY REPORT ──────────────────────────────── */}
           <section id="sec-idsp" className="home-section" style={{ borderBottom: "1px solid #1e3a5f", backgroundColor: "#06090f" }}>

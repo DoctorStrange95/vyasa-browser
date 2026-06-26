@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from "react";
 
 const SECTIONS = [
   { id: "sec-hero",        icon: "🏠", label: "Overview" },
-  { id: "sec-facilities",  icon: "🏥", label: "Facilities" },
-  { id: "sec-intel",       icon: "📡", label: "Intel Feed" },
+  { id: "sec-nfhs",        icon: "📊", label: "NFHS-5 vs 6" },
+  { id: "sec-doctors",     icon: "👨‍⚕️", label: "Find a Doctor" },
   { id: "sec-idsp",        icon: "📊", label: "IDSP Weekly" },
   { id: "sec-leaders",     icon: "🏆", label: "Leaders" },
   { id: "sec-states",      icon: "📋", label: "All States" },
