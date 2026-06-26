@@ -164,7 +164,7 @@ export default function StatesPage() {
                   {/* quick deltas */}
                   {r.filter((x) => x.d != null).slice(0, 3).map((x) => (
                     <span key={x.label} title={x.label} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: "0.74rem", color: x.improved ? UP : DOWN }}>
-                      {x.improved ? "▲" : "▼"}{x.d! > 0 ? "+" : ""}{x.d}
+                      {x.d! > 0 ? "▲" : "▼"}{x.d! > 0 ? "+" : ""}{x.d}
                     </span>
                   ))}
                   <span style={{ ...scoreBadge, color: scoreColour, borderColor: scoreColour + "55" }}>{sc}</span>
@@ -187,7 +187,7 @@ export default function StatesPage() {
                           <td style={{ ...td, color: "#94a3b8" }}>{x.n5 ?? "—"}</td>
                           <td style={{ ...td, color: "#e2e8f0", fontWeight: 700 }}>{x.n6 ?? "—"}</td>
                           <td style={{ ...td, color: x.improved == null ? FLAT : x.improved ? UP : DOWN, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" }}>
-                            {x.d == null ? "—" : `${x.improved ? "▲" : "▼"} ${x.d > 0 ? "+" : ""}${x.d}`}
+                            {x.d == null ? "—" : `${x.d > 0 ? "▲" : "▼"} ${x.d > 0 ? "+" : ""}${x.d}`}
                           </td>
                           <td style={{ ...td, color: "#64748b" }}>{x.nat}</td>
                         </tr>
