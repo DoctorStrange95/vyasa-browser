@@ -150,7 +150,7 @@ export default function StatesPage() {
       {/* ── Logical scoring methodology (rule-based, not AI) ── */}
       <details style={{ ...card, marginTop: "1.25rem" }}>
         <summary style={{ cursor: "pointer", listStyle: "none", padding: "0.9rem 1.1rem", fontWeight: 700, color: "#e2e8f0", fontSize: "0.92rem" }}>
-          ⚖️ How the Vyasa Health Score is calculated <span style={{ color: "#64748b", fontWeight: 400, fontSize: "0.78rem" }}>(transparent formula — not AI)</span>
+          ⚖️ How the Vyasa Health Score is calculated <span style={{ color: "#64748b", fontWeight: 400, fontSize: "0.78rem" }}>(transparent formula)</span>
         </summary>
         <div style={{ padding: "0 1.1rem 1.1rem", fontSize: "0.88rem", color: "#94a3b8", lineHeight: 1.75 }}>
           <p style={{ marginTop: 0 }}>
