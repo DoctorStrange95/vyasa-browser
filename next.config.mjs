@@ -23,7 +23,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https:",
-              "connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://accounts.google.com https://vyasa-2b84a.firebaseapp.com https://api.groq.com https://news.google.com https://idsp.mohfw.gov.in https://nominatim.openstreetmap.org https://overpass-api.de https://wa.me",
+              "connect-src 'self' https://vyasa-os-backend.onrender.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://accounts.google.com https://vyasa-2b84a.firebaseapp.com https://api.groq.com https://news.google.com https://idsp.mohfw.gov.in https://nominatim.openstreetmap.org https://overpass-api.de https://wa.me",
               "frame-src https://accounts.google.com https://vyasa-2b84a.firebaseapp.com",
               "object-src 'none'",
               "base-uri 'self'",

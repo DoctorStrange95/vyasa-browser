@@ -9,7 +9,7 @@ import HomeSearch from "@/components/HomeSearch";
 import DoctorDirectory from "@/components/DoctorDirectory";
 import states from "@/data/states.json";
 
-const PORTAL = "https://vyasa-health-os.pages.dev";
+const PORTAL = "https://app.vyasaa.com";
 
 export const metadata: Metadata = {
   title: "India's Public Health Transparency Platform",

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const API = "https://vyasa-os-backend.onrender.com";
-const PORTAL = "https://vyasa-health-os.pages.dev";
+const PORTAL = "https://app.vyasaa.com";
 
 interface Doctor {
   id: number;

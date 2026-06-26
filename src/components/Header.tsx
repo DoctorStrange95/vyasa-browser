@@ -113,7 +113,7 @@ export default function Header({ user, uiConfig }: { user?: HeaderUser | null; u
           {/* For professionals only */}
           {showForDoctors && (
             <a
-              href="https://vyasa-health-os.pages.dev/register"
+              href="https://app.vyasaa.com/register"
               target="_blank"
               rel="noopener noreferrer"
               className="header-join-btn"
