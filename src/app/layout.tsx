@@ -32,10 +32,10 @@ export const metadata: Metadata = {
     template: "%s | Vyasa",
   },
   description:
-    "District-level public health data for every Indian state and UT — infant mortality, vaccination coverage, disease outbreaks, hospital infrastructure, nutrition and air quality. Powered by NFHS-5, SRS 2023, IDSP and MoHFW.",
+    "District-level public health data for every Indian state and UT — infant mortality, vaccination coverage, disease outbreaks, hospital infrastructure, nutrition and air quality. Powered by NFHS-6, SRS 2023, IDSP and MoHFW.",
   keywords: [
     "India public health data", "district health statistics India", "IMR India",
-    "infant mortality rate India state wise", "NFHS-5 data India", "IDSP outbreak report India",
+    "infant mortality rate India state wise", "NFHS-6 data India", "IDSP outbreak report India",
     "vaccination coverage India state wise", "hospital infrastructure India district",
     "India disease surveillance IDSP", "MoHFW data portal", "SRS 2023 India state",
     "Ayushman Bharat hospital list", "state health ranking India", "public health dashboard India",

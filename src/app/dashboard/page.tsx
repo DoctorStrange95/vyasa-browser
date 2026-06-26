@@ -413,7 +413,7 @@ export default function DashboardPage() {
                   <div style={{ fontSize: "0.72rem", color: "#475569", marginTop: "0.2rem" }}>STATE HEALTH DASHBOARD · INDIA</div>
                   <div style={{ marginTop: "0.5rem", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
                     <span style={{ fontSize: "0.62rem", color: "#22c7bb", border: "1px solid #22c7bb40", borderRadius: "4px", padding: "0.1rem 0.4rem" }}>SRS 2023</span>
-                    <span style={{ fontSize: "0.62rem", color: "#60a5fa", border: "1px solid #60a5fa40", borderRadius: "4px", padding: "0.1rem 0.4rem" }}>NFHS-5 2019–21</span>
+                    <span style={{ fontSize: "0.62rem", color: "#60a5fa", border: "1px solid #60a5fa40", borderRadius: "4px", padding: "0.1rem 0.4rem" }}>NFHS-6 2023-24</span>
                     <span style={{ fontSize: "0.62rem", color: "#f59e0b", border: "1px solid #f59e0b40", borderRadius: "4px", padding: "0.1rem 0.4rem" }}>AB-PMJAY</span>
                   </div>
                 </div>
@@ -627,7 +627,7 @@ export default function DashboardPage() {
           <div style={{ color: "#475569", textAlign: "center", padding: "2.5rem 1rem" }}>
             <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>⏳</div>
             <div style={{ fontSize: "0.88rem", color: "#64748b", marginBottom: "0.25rem" }}>Please wait, fetching state health data…</div>
-            <div style={{ fontSize: "0.72rem", color: "#334155" }}>Loading NFHS-5 · SRS 2023 · AB-PMJAY data for all 36 states &amp; UTs</div>
+            <div style={{ fontSize: "0.72rem", color: "#334155" }}>Loading NFHS-6 · SRS 2023 · AB-PMJAY data for all 36 states &amp; UTs</div>
           </div>
         ) : (() => {
           const PREVIEW = 12;
@@ -671,7 +671,7 @@ export default function DashboardPage() {
           );
         })()}
         <div style={{ marginTop: "0.75rem", fontSize: "0.75rem", color: "#475569", lineHeight: 1.5 }}>
-          Health score: weighted composite of IMR, vaccination, institutional births, stunting &amp; anaemia · Source: NFHS-5, SRS 2023, NHA AB-PMJAY
+          Health score: weighted composite of IMR, vaccination, institutional births, stunting &amp; anaemia · Source: NFHS-6, SRS 2023, NHA AB-PMJAY
         </div>
       </div>
     </div>

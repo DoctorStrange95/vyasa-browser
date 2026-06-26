@@ -62,7 +62,7 @@ export default function Footer() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
               <a href="https://nhp.gov.in"              target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>NHP India</a>
-              <a href="https://nfhs.iipsindia.ac.in"    target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>NFHS-5</a>
+              <a href="https://nfhs.iipsindia.ac.in"    target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>NFHS-6</a>
               <a href="https://pmjay.gov.in"            target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>PMJAY / Ayushman</a>
               <a href="https://cpcb.nic.in"             target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>CPCB AQI</a>
               <a href="https://idsp.mohfw.gov.in"       target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>IDSP</a>
@@ -86,7 +86,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div style={{ borderTop: "1px solid #1e3a5f", paddingTop: "1.5rem", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "0.75rem" }}>
           <p style={{ fontSize: "0.78rem", color: "#475569" }}>
-            © 2025 Vyasa Integrated Healthcare Pvt. Ltd. Data sourced from NHP, NFHS-5, IDSP, PMJAY, CPCB. For reference only.
+            © 2025 Vyasa Integrated Healthcare Pvt. Ltd. Data sourced from NHP, NFHS-6, IDSP, PMJAY, CPCB. For reference only.
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <p className="font-data" style={{ fontSize: "0.72rem", color: "#334155" }}>

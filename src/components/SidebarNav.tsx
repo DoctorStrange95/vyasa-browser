@@ -130,7 +130,7 @@ export default function SidebarNav() {
       {/* IDSP data source note */}
       <div style={{ padding: "0.75rem 1rem 0", marginTop: "0.5rem", borderTop: "1px solid #1e3a5f" }}>
         <div style={{ fontSize: "0.58rem", color: "#1e3a5f", lineHeight: 1.5 }}>
-          Data: IDSP · NFHS-5 · SRS 2023 · MoHFW · NCDC · WHO
+          Data: IDSP · NFHS-6 · SRS 2023 · MoHFW · NCDC · WHO
         </div>
       </div>
     </div>

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     s.vaccinationPct != null ? `${s.vaccinationPct}% vaccination coverage` : null,
     s.institutionalBirthsPct != null ? `${s.institutionalBirthsPct}% institutional births` : null,
     `health score ${score}/100.`,
-    "Source: NFHS-5, SRS 2023, IDSP, MoHFW.",
+    "Source: NFHS-6, SRS 2023, IDSP, MoHFW.",
   ].filter(Boolean).join(", ");
   const url = `https://vyasaa.com/state/${s.slug}`;
   return {
@@ -182,7 +182,7 @@ export default async function StatePage({ params }: { params: { slug: string } }
           <Link href="/" style={{ color: "#0d9488", textDecoration: "none", fontWeight: 500 }}>India</Link>
           <span>›</span>
           <span style={{ color: "#e2e8f0", fontWeight: 500 }}>{state.name}</span>
-          <span style={{ marginLeft: "auto", fontSize: "0.6rem", color: "#334155" }}>SRS 2023 · NFHS-5 · IDSP</span>
+          <span style={{ marginLeft: "auto", fontSize: "0.6rem", color: "#334155" }}>SRS 2023 · NFHS-6 · IDSP</span>
         </div>
       </div>
 
@@ -203,7 +203,7 @@ export default async function StatePage({ params }: { params: { slug: string } }
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.6rem" }}>
                 {[
                   { l: "SRS 2023", c: "#0d9488" },
-                  { l: "NFHS-5 2019–21", c: "#6366f1" },
+                  { l: "NFHS-6 2023-24", c: "#6366f1" },
                   ...(liveHospitals ? [{ l: "NHP RHS Live", c: "#2dd4bf" }] : []),
                   ...(idspCache ? [{ l: "IDSP Surveillance", c: "#eab308" }] : []),
                 ].map(s => (
@@ -341,7 +341,7 @@ export default async function StatePage({ params }: { params: { slug: string } }
             <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
               {[
                 ["IMR / Vital",    "SRS 2023 (Registrar General of India) · state-level"],
-                ["NFHS Metrics",   "NFHS-5 2019–21 · vaccination, nutrition, anaemia, births"],
+                ["NFHS Metrics",   "NFHS-6 2023-24 · vaccination, nutrition, anaemia, births"],
                 ["PHC / CHC",      liveHospitals ? "NHP Rural Health Statistics (live API)" : "NHP 2023 static"],
                 ["IDSP",           idspCache?.refreshedAt ? `IDSP surveillance · refreshed ${new Date(idspCache.refreshedAt).toLocaleDateString("en-IN")}` : "IDSP · pending first refresh"],
                 ["AI Analysis",    "Groq llama-3.3-70b · on-demand generation"],

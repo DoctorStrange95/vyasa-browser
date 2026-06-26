@@ -29,9 +29,9 @@ export default function HealthTicker() {
           { label: "Urban IMR (SRS 2023)",           value: String(d.imrUrban ?? "18"),        unit: "/1000 LB", trend: "↓" },
           { label: "Birth Rate (SRS 2023)",          value: String(d.birthRate ?? "18.4"),     unit: "/1000",    trend: "↓" },
           { label: "Death Rate (SRS 2023)",          value: String(d.deathRate ?? "6.4"),      unit: "/1000",    trend: "↓" },
-          { label: "Fully Immunized (NFHS-5)",       value: String(d.vaccinationPct),          unit: "%",        trend: "↑" },
-          { label: "Child Stunting (NFHS-5)",        value: String(d.stuntingPct),             unit: "%",        trend: "↓" },
-          { label: "Institutional Births (NFHS-5)",  value: String(d.institutionalBirthsPct),  unit: "%",        trend: "↑" },
+          { label: "Fully Immunized (NFHS-6)",       value: String(d.vaccinationPct),          unit: "%",        trend: "↑" },
+          { label: "Child Stunting (NFHS-6)",        value: String(d.stuntingPct),             unit: "%",        trend: "↓" },
+          { label: "Institutional Births (NFHS-6)",  value: String(d.institutionalBirthsPct),  unit: "%",        trend: "↑" },
           { label: "Child Anaemia (NFHS-5)",         value: String(d.anaemiaPct),              unit: "%",        trend: "↓" },
         ]);
       })
@@ -41,7 +41,7 @@ export default function HealthTicker() {
   const items = [...(liveItems.length ? liveItems : [
     { label: "National IMR (SRS 2020)",  value: "28",   unit: "/1000 LB", trend: "↓" },
     { label: "Under-5 MR (SRS 2020)",   value: "32",   unit: "/1000 LB", trend: "↓" },
-    { label: "Fully Immunized (NFHS-5)", value: "76.4", unit: "%",        trend: "↑" },
+    { label: "Fully Immunized (NFHS-6)", value: "82.6", unit: "%",        trend: "↑" },
   ]), ...STATIC_ITEMS];
 
   const doubled = [...items, ...items];

@@ -57,7 +57,7 @@ export default function StateGrid({ states }: { states: State[] }) {
             States &amp; Union Territories
           </h2>
           <p style={{ fontSize: "0.88rem", color: "#64748b" }}>
-            {filtered.length} of {states.length} · NFHS-5 (2019–21) · Click any state to explore districts &amp; live AQI
+            {filtered.length} of {states.length} · NFHS-6 (2023-24) · Click any state to explore districts &amp; live AQI
           </p>
         </div>
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
@@ -128,7 +128,7 @@ function StateCard({ state }: { state: State }) {
         <div style={{ marginBottom: "1rem" }}>
           <div className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>{state.name}</div>
           <div style={{ fontSize: "0.68rem", color: "#475569", marginTop: "0.15rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-            NFHS-5 · 2019–21
+            NFHS-6 · 2023-24
           </div>
         </div>
 

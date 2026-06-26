@@ -88,9 +88,9 @@ function MiniScoreBar({ score }: { score: number }) {
 
 const NATIONAL = [
   { v: "25",    l: "Nat. IMR",    s: "SRS 2023",  c: "#f87171" },
-  { v: "76.4%", l: "Vacc.",       s: "NFHS-5",    c: "#4ade80" },
-  { v: "35.5%", l: "Stunting",    s: "NFHS-5",    c: "#fb923c" },
-  { v: "88.6%", l: "Inst. Birth", s: "NFHS-5",    c: "#818cf8" },
+  { v: "82.6%", l: "Vacc.",       s: "NFHS-6",    c: "#4ade80" },
+  { v: "29.3%", l: "Stunting",    s: "NFHS-6",    c: "#fb923c" },
+  { v: "90.6%", l: "Inst. Birth", s: "NFHS-6",    c: "#818cf8" },
   { v: "32",    l: "U5-MR",       s: "SRS 2023",  c: "#fbbf24" },
   { v: "67.1%", l: "Anaemia",     s: "NFHS-5",    c: "#f472b6" },
 ];
@@ -120,7 +120,7 @@ export default function InteractiveHome({ states }: { states: StateData[] }) {
             <span style={{ width: "7px", height: "7px", borderRadius: "50%", backgroundColor: "#2dd4bf", boxShadow: "0 0 6px #2dd4bf", display: "inline-block" }} />
             <h1 className="font-display" style={{ fontSize: "1rem", fontWeight: 700, color: "#fff", margin: 0 }}>India Health Map</h1>
           </div>
-          <span style={{ fontSize: "0.58rem", color: "#334155", backgroundColor: "#0a1628", border: "1px solid #1e3a5f", borderRadius: "4px", padding: "0.1rem 0.4rem", fontFamily: "monospace" }}>NFHS-5 · SRS 2023</span>
+          <span style={{ fontSize: "0.58rem", color: "#334155", backgroundColor: "#0a1628", border: "1px solid #1e3a5f", borderRadius: "4px", padding: "0.1rem 0.4rem", fontFamily: "monospace" }}>NFHS-6 · SRS 2023</span>
           <span style={{ fontSize: "0.65rem", color: "#475569", marginLeft: "auto" }}>Hover to preview · Click to select</span>
         </div>
 
@@ -224,17 +224,17 @@ export default function InteractiveHome({ states }: { states: StateData[] }) {
                     <MetricBar
                       label="Vaccination Coverage" value={selected.vaccinationPct} unit="%"
                       score={selected.vaccinationPct ?? 50}
-                      nationalVal="76.4%" nationalLabel="NFHS-5" higherIsBetter={true}
+                      nationalVal="82.6%" nationalLabel="NFHS-6" higherIsBetter={true}
                     />
                     <MetricBar
                       label="Institutional Births" value={selected.institutionalBirthsPct} unit="%"
                       score={selected.institutionalBirthsPct ?? 50}
-                      nationalVal="88.6%" nationalLabel="NFHS-5" higherIsBetter={true}
+                      nationalVal="90.6%" nationalLabel="NFHS-6" higherIsBetter={true}
                     />
                     <MetricBar
                       label="Child Stunting" value={selected.stuntingPct} unit="%"
                       score={selected.stuntingPct !== null ? Math.max(0, 100 - (selected.stuntingPct / 50) * 100) : 50}
-                      nationalVal="35.5%" nationalLabel="NFHS-5" higherIsBetter={false}
+                      nationalVal="29.3%" nationalLabel="NFHS-6" higherIsBetter={false}
                     />
                     <MetricBar
                       label="Women's Anaemia" value={selected.womenAnaemiaPct} unit="%"

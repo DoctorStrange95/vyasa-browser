@@ -13,9 +13,17 @@
   "under5MR": 32,
   "under5MR_NFHS5": 41.9,
   "neonatalMR": 20,
-  "vaccinationPct": 76.4,
-  "stuntingPct": 35.5,
-  "institutionalBirthsPct": 88.6,
+  "nfhsRound": 6,
+  "vaccinationPct": 82.6,
+  "vaccinationPct_NFHS5": 76.6,
+  "stuntingPct": 29.3,
+  "stuntingPct_NFHS5": 35.5,
+  "wastingPct": 19.0,
+  "wastingPct_NFHS5": 19.3,
+  "underweightPct": 31.8,
+  "underweightPct_NFHS5": 32.1,
+  "institutionalBirthsPct": 90.6,
+  "institutionalBirthsPct_NFHS5": 88.6,
   "anaemiaPct": 67.1,
   "pmjayBeneficiaries": "550M+",
   "bloodBanks": 3859,
@@ -25,7 +33,9 @@
     "deathRate": "SRS 2023 (RGI)",
     "under5MR": "SRS 2020",
     "neonatalMR": "SRS 2020",
-    "vaccination": "NFHS-5 2019-21 (IIPS)",
-    "stunting": "NFHS-5 2019-21 (IIPS)"
+    "vaccination": "NFHS-6 2023-24 (IIPS) — NFHS-5: 76.6%",
+    "stunting": "NFHS-6 2023-24 (IIPS) — NFHS-5: 35.5%",
+    "institutionalBirths": "NFHS-6 2023-24 (IIPS) — NFHS-5: 88.6%",
+    "anaemia": "NFHS-5 2019-21 (IIPS) — not in NFHS-6 fact sheet"
   }
 }

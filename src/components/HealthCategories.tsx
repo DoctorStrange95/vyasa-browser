@@ -163,7 +163,7 @@ export default function HealthCategories({
             <MetricCard label="Infant Mortality Rate" value={primaryIMR} unit="/1000 LB" sub="SRS 2023 (RGI)" best={15} worst={35} srcBadge="SRS 2023" />
           )}
           {imrNFHS5 != null && (
-            <MetricCard label="IMR (NFHS-5 Survey)" value={imrNFHS5} unit="/1000 LB" sub="NFHS-5 2019–21 survey estimate" best={20} worst={40} srcBadge="NFHS-5" />
+            <MetricCard label="IMR (NFHS-5 Survey)" value={imrNFHS5} unit="/1000 LB" sub="NFHS-5 2019-21 survey estimate" best={20} worst={40} srcBadge="NFHS-5" />
           )}
           {imrRural != null && <MetricCard label="IMR Rural" value={imrRural} unit="/1000 LB" sub="SRS 2023 rural estimate" best={18} worst={40} srcBadge="SRS 2023" />}
           {imrUrban != null && <MetricCard label="IMR Urban" value={imrUrban} unit="/1000 LB" sub="SRS 2023 urban estimate" best={12} worst={28} srcBadge="SRS 2023" />}
@@ -247,8 +247,8 @@ export default function HealthCategories({
         <section id="vaccination" style={{ scrollMarginTop: "90px" }}>
           <CategoryHeader roman="III" title="Vaccination Coverage" icon="💉" />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: "0.85rem" }}>
-            <MetricCard label="Full Immunization" value={`${vaccinationPct}%`} sub="Children fully immunized 12–23 months" best={85} worst={60} higher srcBadge="NFHS-5" />
-            {instBirthsPct != null && <MetricCard label="Institutional Births" value={`${instBirthsPct}%`} sub="Delivered in health facility" best={90} worst={70} higher srcBadge="NFHS-5" />}
+            <MetricCard label="Full Immunization" value={`${vaccinationPct}%`} sub="Children fully immunized 12–23 months" best={85} worst={60} higher srcBadge="NFHS-6" />
+            {instBirthsPct != null && <MetricCard label="Institutional Births" value={`${instBirthsPct}%`} sub="Delivered in health facility" best={90} worst={70} higher srcBadge="NFHS-6" />}
           </div>
           {vaccinationPct != null && (
             <div style={{ marginTop: "0.85rem", backgroundColor: "#0f2040", border: "1px solid #1e3a5f", borderRadius: "8px", padding: "0.85rem 1.25rem" }}>
@@ -272,9 +272,9 @@ export default function HealthCategories({
         <section id="nutrition" style={{ scrollMarginTop: "90px" }}>
           <CategoryHeader roman="IV" title="Nutritional Status" icon="🥗" />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: "0.85rem" }}>
-            {stuntingPct != null && <MetricCard label="Child Stunting" value={`${stuntingPct}%`} sub="Height-for-age below -2 SD (under 5)" best={20} worst={40} srcBadge="NFHS-5" />}
-            {wastingPct != null && <MetricCard label="Child Wasting" value={`${wastingPct}%`} sub="Acute malnutrition under 5" best={10} worst={20} srcBadge="NFHS-5" />}
-            {underweightPct != null && <MetricCard label="Child Underweight" value={`${underweightPct}%`} sub="Weight-for-age below -2 SD" best={20} worst={40} srcBadge="NFHS-5" />}
+            {stuntingPct != null && <MetricCard label="Child Stunting" value={`${stuntingPct}%`} sub="Height-for-age below -2 SD (under 5)" best={20} worst={40} srcBadge="NFHS-6" />}
+            {wastingPct != null && <MetricCard label="Child Wasting" value={`${wastingPct}%`} sub="Acute malnutrition under 5" best={10} worst={20} srcBadge="NFHS-6" />}
+            {underweightPct != null && <MetricCard label="Child Underweight" value={`${underweightPct}%`} sub="Weight-for-age below -2 SD" best={20} worst={40} srcBadge="NFHS-6" />}
           </div>
         </section>
       )}

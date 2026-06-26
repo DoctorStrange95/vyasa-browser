@@ -63,7 +63,7 @@ export default function SourcesPage() {
         </p>
         <p style={{ fontSize: "0.85rem", color: "#475569", marginTop: "0.75rem" }}>
           The data shown is representative of years 2021–2023 depending on availability.
-          NFHS-5 data covers 2019–21. AQI data is updated annually. See our full{" "}
+          NFHS-6 data covers 2023-24. AQI data is updated annually. See our full{" "}
           <a href="/nfhs-6" style={{ color: "#2dd4bf", textDecoration: "underline" }}>
             NFHS-6 (2023-24) key-indicator analysis and NFHS-5 comparison
           </a>.
@@ -100,13 +100,13 @@ const SOURCES: Source[] = [
   },
   {
     id: "NFHS",
-    name: "NFHS-5",
-    fullName: "National Family Health Survey – 5",
+    name: "NFHS-6",
+    fullName: "National Family Health Survey – 6",
     url: "https://nfhs.iipsindia.ac.in",
     description:
-      "NFHS-5 (2019–21) is conducted by the International Institute for Population Sciences under MoHFW. It is the most comprehensive source for maternal and child health indicators including IMR, vaccination, nutrition, and fertility.",
+      "NFHS-6 (2023-24) is conducted by the International Institute for Population Sciences under MoHFW. It is the most comprehensive source for maternal and child health indicators including IMR, vaccination, nutrition, and fertility.",
     metrics: ["Infant Mortality Rate (IMR)", "Vaccination Coverage", "Malnutrition %", "Institutional Births", "Maternal Mortality Ratio"],
-    updateFrequency: "Every ~5 years (NFHS-6 expected 2028)",
+    updateFrequency: "Every ~5 years (NFHS-7 expected ~2029)",
     coverage: "District-level for all 707 districts",
     color: "#6366f1",
   },

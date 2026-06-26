@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     `${city.name}, ${stateName} public health data:`,
     city.aqi != null ? `AQI ${city.aqi} (${city.aqiLabel ?? ""})` : null,
     "hospital infrastructure, disease outbreaks, vaccination coverage.",
-    "Source: CPCB, NFHS-5, IDSP, MoHFW.",
+    "Source: CPCB, NFHS-6, IDSP, MoHFW.",
   ].filter(Boolean).join(" ");
   const url = `https://vyasaa.com/district/${city.slug}`;
   return {
@@ -149,7 +149,7 @@ export default async function DistrictPage({ params }: { params: { slug: string 
           )}
           <span style={{ color: "#e2e8f0", fontWeight: 500 }}>{city.name}</span>
           <span style={{ marginLeft: "auto", fontSize: "0.6rem", color: "#334155" }}>
-            {liveAQI && <span style={{ color: "#2dd4bf" }}>● Live AQI  </span>}SRS 2023 · NFHS-5
+            {liveAQI && <span style={{ color: "#2dd4bf" }}>● Live AQI  </span>}SRS 2023 · NFHS-6
           </span>
         </div>
       </div>
@@ -167,7 +167,7 @@ export default async function DistrictPage({ params }: { params: { slug: string 
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.6rem" }}>
                 {liveAQI && <span style={{ fontSize: "0.62rem", color: "#f97316", backgroundColor: "#f9731618", border: "1px solid #f9731640", borderRadius: "4px", padding: "0.12rem 0.45rem", fontFamily: "monospace" }}>{aqiSrc} · AQI {aqi}</span>}
-                {stateData && <span style={{ fontSize: "0.62rem", color: "#6366f1", backgroundColor: "#6366f118", border: "1px solid #6366f140", borderRadius: "4px", padding: "0.12rem 0.45rem", fontFamily: "monospace" }}>NFHS-5 (state)</span>}
+                {stateData && <span style={{ fontSize: "0.62rem", color: "#6366f1", backgroundColor: "#6366f118", border: "1px solid #6366f140", borderRadius: "4px", padding: "0.12rem 0.45rem", fontFamily: "monospace" }}>NFHS-6 (state)</span>}
                 {liveHospitals && <span style={{ fontSize: "0.62rem", color: "#2dd4bf", backgroundColor: "#2dd4bf18", border: "1px solid #2dd4bf40", borderRadius: "4px", padding: "0.12rem 0.45rem", fontFamily: "monospace" }}>NHP Live</span>}
               </div>
             </div>
@@ -279,7 +279,7 @@ export default async function DistrictPage({ params }: { params: { slug: string 
                     IMR {imr ?? "—"} · Vaccination {vaccPct != null ? `${vaccPct}%` : "—"} · Stunting {stuntingPct != null ? `${stuntingPct}%` : "—"}
                   </div>
                   <div style={{ fontSize: "0.75rem", color: "#475569", marginTop: "0.2rem" }}>
-                    Full NFHS-5 · SRS 2023 · AB-PMJAY data for {stateData.name}
+                    Full NFHS-6 · SRS 2023 · AB-PMJAY data for {stateData.name}
                   </div>
                 </div>
                 <span style={{ color: "#0d9488", fontSize: "0.85rem", fontWeight: 600, flexShrink: 0 }}>View full dashboard →</span>
@@ -303,7 +303,7 @@ export default async function DistrictPage({ params }: { params: { slug: string 
               {[
                 ["AQI",       liveAQI ? `${aqiSrc} · ${liveAQI.stationCount} station(s) · ${liveAQI.lastUpdate}` : "CPCB static"],
                 ["IMR/Mort",  "SRS 2023 (RGI) · state-level"],
-                ["NFHS",      "NFHS-5 2019–21 · vaccination, stunting, anaemia"],
+                ["NFHS",      "NFHS-6 2023-24 · vaccination, stunting, anaemia"],
                 ["PHC/CHC",   liveHospitals ? "NHP Rural Health Statistics (live API)" : "NHP 2023 static"],
                 ["IDSP",      idspCache?.refreshedAt ? `IDSP surveillance · refreshed ${new Date(idspCache.refreshedAt).toLocaleDateString("en-IN")}` : "IDSP · pending refresh"],
                 ["AI",        "Groq llama-3.3-70b · on-demand generation"],

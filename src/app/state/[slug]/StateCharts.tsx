@@ -308,7 +308,7 @@ export default function StateCharts({ metrics, stateName }: { metrics: StateMetr
           </div>
 
           <div style={{ marginTop: "1rem", fontSize: "0.68rem", color: "#334155", textAlign: "right" }}>
-            * Trend lines are estimates extrapolated from SRS 2023 &amp; NFHS-5 endpoints · Not primary-source year-by-year data
+            * Trend lines are estimates extrapolated from SRS 2023 &amp; NFHS-6 endpoints · Not primary-source year-by-year data
           </div>
         </div>
       )}

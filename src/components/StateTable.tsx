@@ -83,7 +83,7 @@ export default function StateTable({ states }: { states: State[] }) {
           States &amp; Union Territories
         </h2>
         <p style={{ fontSize: "0.88rem", color: "#64748b" }}>
-          {sorted.length} of {states.length} · NFHS-5 (2019–21) · Click any row to explore districts, AQI &amp; health centres
+          {sorted.length} of {states.length} · NFHS-6 (2023-24) · Click any row to explore districts, AQI &amp; health centres
         </p>
       </div>
 
@@ -181,7 +181,7 @@ export default function StateTable({ states }: { states: State[] }) {
       )}
 
       <p style={{ marginTop: "0.75rem", fontSize: "0.72rem", color: "#334155", textAlign: "right" }}>
-        Source: NFHS-5 (2019–21) · IMR/U5-MR per 1000 live births · Hover column headers for definitions
+        Source: NFHS-6 (2023-24) · IMR/U5-MR per 1000 live births · Hover column headers for definitions
       </p>
     </section>
   );

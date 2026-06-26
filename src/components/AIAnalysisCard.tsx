@@ -116,7 +116,7 @@ export default function AIAnalysisCard({ name, level = "state", metrics }: Props
           )}
           {done && (
             <div style={{ marginTop: "0.75rem", paddingTop: "0.6rem", borderTop: "1px solid #1e3a5f", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: "0.6rem", color: "#334155" }}>Source: Groq llama-3.3-70b · SRS 2023 + NFHS-5 data</span>
+              <span style={{ fontSize: "0.6rem", color: "#334155" }}>Source: Groq llama-3.3-70b · SRS 2023 + NFHS-6 data</span>
               <button
                 onClick={() => { setText(""); setDone(false); load(); }}
                 style={{ background: "none", border: "1px solid #1e3a5f", color: "#475569", cursor: "pointer", fontSize: "0.62rem", padding: "0.15rem 0.5rem", borderRadius: "4px" }}

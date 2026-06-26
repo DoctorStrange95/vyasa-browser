@@ -344,7 +344,7 @@ export default function GlobalSidebar({ user, uiConfig }: { user?: HeaderUser | 
             </Link>
           )}
           <div style={{ fontSize: "0.56rem", color: "#1e3a5f", lineHeight: 1.5, marginTop: "0.65rem", textAlign: "center" }}>
-            IDSP · NFHS-5 · SRS 2023 · MoHFW
+            IDSP · NFHS-6 · SRS 2023 · MoHFW
           </div>
         </div>
       )}

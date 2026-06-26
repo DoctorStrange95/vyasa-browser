@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
           <div style={{ display: "flex", alignItems: "center", gap: 28, marginTop: 40 }}>
             {(metric
               ? [metric]
-              : ["IDSP Surveillance", "NFHS-5 · SRS 2023", "36 States · 700+ Districts"]
+              : ["IDSP Surveillance", "NFHS-6 · SRS 2023", "36 States · 700+ Districts"]
             ).map(tag => (
               <div key={tag} style={{
                 display: "flex", alignItems: "center", gap: 8,

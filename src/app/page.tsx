@@ -14,7 +14,7 @@ const PORTAL = "https://app.vyasaa.com";
 export const metadata: Metadata = {
   title: "India's Public Health Transparency Platform",
   description:
-    "District-level public health data for every Indian state and UT — infant mortality, vaccination, IDSP disease outbreaks, hospital infrastructure, nutrition and air quality. NFHS-5 · SRS 2023 · MoHFW.",
+    "District-level public health data for every Indian state and UT — infant mortality, vaccination, IDSP disease outbreaks, hospital infrastructure, nutrition and air quality. NFHS-6 · SRS 2023 · MoHFW.",
   alternates: { canonical: "https://www.vyasaa.com" },
 };
 
@@ -63,7 +63,7 @@ export default function HomePage() {
             "url": "https://www.vyasaa.com",
             "creator": { "@type": "Organization", "name": "Vyasa Health" },
             "license": "https://creativecommons.org/licenses/by/4.0/",
-            "keywords": ["India", "public health", "IMR", "vaccination", "NFHS-5", "IDSP", "disease surveillance"],
+            "keywords": ["India", "public health", "IMR", "vaccination", "NFHS-6", "IDSP", "disease surveillance"],
             "spatialCoverage": { "@type": "Place", "name": "India" },
             "temporalCoverage": "2023",
             "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://www.vyasaa.com/api/idsp" }],
@@ -82,7 +82,7 @@ export default function HomePage() {
                 <div style={{ maxWidth: "560px", flex: "1 1 280px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.6rem", flexWrap: "wrap" }}>
                     <span style={{ fontSize: "0.7rem", backgroundColor: "#0d948820", color: "#2dd4bf", border: "1px solid #0d948840", borderRadius: "4px", padding: "0.15rem 0.5rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>Live · Updated Daily</span>
-                    <span style={{ fontSize: "0.6rem", color: "#334155" }}>SRS 2023 · NFHS-5 · IDSP</span>
+                    <span style={{ fontSize: "0.6rem", color: "#334155" }}>SRS 2023 · NFHS-6 · IDSP</span>
                   </div>
                   <h1 className="font-display hero-heading" style={{ fontSize: "clamp(1.6rem,4vw,2.6rem)", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: "0.65rem" }}>
                     India&apos;s Public Health<br />Transparency Platform

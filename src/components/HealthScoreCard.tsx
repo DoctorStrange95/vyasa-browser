@@ -54,7 +54,7 @@ export default function HealthScoreCard({
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "1rem" }}>
         <div>
           <div className="font-display" style={{ fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>Composite Health Score</div>
-          <div style={{ fontSize: "0.75rem", color: "#64748b", marginTop: "0.2rem" }}>{dimensions.length} dimensions · NFHS-5 + CPCB</div>
+          <div style={{ fontSize: "0.75rem", color: "#64748b", marginTop: "0.2rem" }}>{dimensions.length} dimensions · NFHS-6 + CPCB</div>
         </div>
         <div style={{ textAlign: "center" }}>
           <div className="font-data" style={{ fontSize: "2.5rem", fontWeight: 700, color: color(overall), lineHeight: 1 }}>{overall}</div>

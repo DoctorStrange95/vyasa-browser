@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
   if (metrics.imr       != null) lines.push(`IMR: ${metrics.imr}/1000 LB (national avg 28)`);
   if (metrics.neonatalMR!= null) lines.push(`Neonatal MR: ${metrics.neonatalMR}/1000 LB`);
   if (metrics.under5MR  != null) lines.push(`Under-5 MR: ${metrics.under5MR}/1000 LB`);
-  if (metrics.vaccPct   != null) lines.push(`Full vaccination: ${metrics.vaccPct}% (national 76.4%)`);
-  if (metrics.stuntingPct!= null) lines.push(`Stunting: ${metrics.stuntingPct}% (national 35.5%)`);
+  if (metrics.vaccPct   != null) lines.push(`Full vaccination: ${metrics.vaccPct}% (national 82.6%)`);
+  if (metrics.stuntingPct!= null) lines.push(`Stunting: ${metrics.stuntingPct}% (national 29.3%)`);
   if (metrics.wastingPct!= null) lines.push(`Wasting: ${metrics.wastingPct}%`);
   if (metrics.underweightPct!= null) lines.push(`Underweight: ${metrics.underweightPct}%`);
   if (metrics.instBirths!= null) lines.push(`Institutional births: ${metrics.instBirths}%`);
