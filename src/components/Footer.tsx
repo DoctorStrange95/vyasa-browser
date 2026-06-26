@@ -48,7 +48,6 @@ export default function Footer() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
               <Link href="/"          style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Health Map</Link>
-              <Link href="/citizens"  style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Citizens Centre</Link>
               <Link href="/sources"   style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Data Sources</Link>
               <Link href="/team"      style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Our Team</Link>
               <a href="https://app.vyasaa.com/register" target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Sign up</a>
