@@ -49,6 +49,14 @@ const INDS = [
   { key: "underweightPct",         label: "Child underweight",        good: "down", nat: national.underweightPct },
 ] as const;
 
+const SHORT: Record<string, string> = {
+  "Full child immunisation": "Vacc",
+  "Institutional births": "Births",
+  "Child stunting": "Stunt",
+  "Child wasting": "Wasting",
+  "Child underweight": "U.weight",
+};
+
 function num(v: unknown): number | null { return typeof v === "number" ? v : null; }
 
 function score(s: S): number {
@@ -144,7 +152,7 @@ export default function StatesPage() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: "1.2rem", margin: "1.25rem 0 0.5rem", fontSize: "0.8rem", color: "#64748b" }}>
         <span><span style={{ color: UP }}>▲ teal</span> = improved</span>
         <span><span style={{ color: DOWN }}>▼ red</span> = worsened</span>
-        <span>Ranked by composite health score (IMR, vaccination, institutional births, stunting, anaemia)</span>
+        <span>Each row shows the NFHS-5 → NFHS-6 change (percentage points) for Vaccination, Inst. births &amp; Stunting, plus the health score</span>
       </div>
 
       {/* ── Logical scoring methodology (rule-based, not AI) ── */}
@@ -180,6 +188,13 @@ export default function StatesPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: "0.84rem", color: "#94a3b8", lineHeight: 1.75 }}>
+            <strong style={{ color: "#cbd5e1" }}>What the denominators (55, 50, 75) mean:</strong> each is a reference &ldquo;worst-case&rdquo; value
+            that maps to a score of 0. A state with an infant-mortality rate of <strong>55</strong>, <strong>50%</strong> stunting,
+            or <strong>75%</strong> women&rsquo;s anaemia scores 0 on that indicator; a value of 0 scores 100, and everything in between
+            scales linearly. These ceilings are set from the worst levels seen across Indian states, so the score spreads states
+            sensibly across the 0–100 range. (Immunisation and institutional births are already percentages, so they are used as-is.)
+          </p>
           <p style={{ fontSize: "0.82rem", color: "#64748b", marginBottom: 0 }}>
             Score = 0.30·IMR* + 0.25·Immunisation + 0.20·Institutional&nbsp;births + 0.15·Stunting* + 0.10·Anaemia*, rounded to the nearest whole number
             (* = normalised so that a lower raw value gives a higher score). Anaemia stays on NFHS-5 because it is not reported in the NFHS-6 fact sheet.
@@ -200,13 +215,19 @@ export default function StatesPage() {
                   <span style={{ fontWeight: 700, color: "#e2e8f0", fontSize: "0.98rem" }}>{s.name}</span>
                   {s.nfhsRound === 5 && <span style={tag}>NFHS-5 only</span>}
                 </span>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.9rem", flexShrink: 0 }}>
+                <span style={{ display: "flex", alignItems: "flex-end", gap: "1rem", flexShrink: 0 }}>
                   {r.filter((x) => x.d != null).slice(0, 3).map((x) => (
-                    <span key={x.label} title={x.label} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: "0.74rem", color: x.improved ? UP : DOWN }}>
-                      {x.d! > 0 ? "▲" : "▼"}{x.d! > 0 ? "+" : ""}{x.d}
+                    <span key={x.label} title={`${x.label}: NFHS-5 ${x.n5}% → NFHS-6 ${x.n6}%`} style={{ display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1.2 }}>
+                      <span style={{ fontSize: "0.55rem", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.03em" }}>{SHORT[x.label] ?? x.label}</span>
+                      <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: "0.74rem", color: x.improved ? UP : DOWN }}>
+                        {x.d! > 0 ? "▲" : "▼"}{x.d! > 0 ? "+" : ""}{x.d}
+                      </span>
                     </span>
                   ))}
-                  <span style={{ ...scoreBadge, color: scoreColour, borderColor: scoreColour + "55" }}>{sc}</span>
+                  <span style={{ display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1.2 }}>
+                    <span style={{ fontSize: "0.55rem", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.03em" }}>Score</span>
+                    <span style={{ ...scoreBadge, color: scoreColour, borderColor: scoreColour + "55" }}>{sc}</span>
+                  </span>
                   <span style={{ color: "#475569", fontSize: "0.8rem" }}>▾</span>
                 </span>
               </summary>
