@@ -32,6 +32,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${s.name} — IMR, Vaccination & Disease Surveillance Data`,
     description: desc,
+    keywords: [
+      `${s.name} health data`, `${s.name} NFHS-6 data`, `${s.name} NFHS-5 vs NFHS-6`,
+      `${s.name} infant mortality rate`, `${s.name} IMR`, `${s.name} vaccination coverage`,
+      `${s.name} institutional births`, `${s.name} child stunting`, `${s.name} total fertility rate`,
+      `${s.name} disease outbreaks IDSP`, `${s.name} public health statistics`, `${s.name} health score`,
+      `${s.name} hospital infrastructure`, `${s.name} Ayushman Bharat hospitals`, `${s.name} doctors`,
+    ],
     alternates: { canonical: url },
     openGraph: {
       title: `${s.name} Public Health Dashboard | Vyasa`,

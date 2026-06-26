@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "NFHS-6 institutional births state wise", "state wise NFHS data India", "NFHS-6 state fact sheet comparison",
     "India state health comparison 2023-24", "NFHS-6 analysis state", "NFHS 5 6 data analysis",
     "infant mortality rate by state India SRS", "NFHS-6 underweight wasting state",
+    "NFHS-6 full immunisation by state", "NFHS-6 caesarean section by state", "NFHS-6 total fertility rate state",
+    "NFHS-6 anaemia by state", "state health score India ranking", "all 36 states UTs health data",
+    "Uttar Pradesh Bihar Kerala NFHS-6 comparison", "best and worst states health India",
   ],
   alternates: { canonical: PAGE },
   openGraph: {

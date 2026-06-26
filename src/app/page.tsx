@@ -15,9 +15,29 @@ export const metadata: Metadata = {
   description:
     "NFHS-6 (2023-24) data and full NFHS-5 vs NFHS-6 comparison for India and every state/UT — vaccination, stunting, fertility, maternal care and NCDs — plus district-level infant mortality, disease outbreaks and hospital infrastructure. SRS 2023 · MoHFW.",
   keywords: [
+    // NFHS surveys
     "NFHS-6 data", "NFHS-6 2023-24", "NFHS-5 vs NFHS-6", "NFHS 5 vs 6", "NFHS-6 India",
     "NFHS-6 state wise data", "National Family Health Survey 6 data", "NFHS-6 vs NFHS-5 comparison",
-    "India public health data", "infant mortality rate India state wise", "IDSP outbreak report India",
+    "NFHS-6 fact sheet", "IIPS NFHS-6", "MoHFW health data India",
+    // Mortality / SRS vital rates
+    "infant mortality rate India state wise", "IMR India 2023", "neonatal mortality rate India",
+    "under-5 mortality rate India", "SRS 2023 India", "crude birth rate India", "crude death rate India",
+    // Child nutrition & immunisation
+    "child stunting India state wise", "child wasting India", "child underweight India",
+    "full child immunisation India", "vaccination coverage India state wise", "measles vaccine coverage India",
+    // Maternal & fertility
+    "institutional births India", "caesarean section rate India", "antenatal care India",
+    "total fertility rate India 2023-24", "TFR India state wise", "family planning India",
+    // NCD & anaemia
+    "diabetes prevalence India NFHS", "hypertension India NFHS", "obesity India NFHS", "anaemia India women",
+    // Disease surveillance & schemes
+    "IDSP weekly outbreak report India", "disease surveillance India", "Ayushman Bharat hospital list", "PMJAY hospitals India",
+    // Doctors / booking (Vyasa Health OS)
+    "find a doctor India", "book doctor appointment online India", "verified doctors directory India",
+    "doctor by specialty India", "Vyasa Health OS doctors", "online doctor booking India",
+    // Brand & platform
+    "India public health data", "district health statistics India", "state health ranking India",
+    "Vyasa Integrated Healthcare", "Vyasa health platform", "Vyasa public health dashboard",
   ],
   alternates: { canonical: "https://www.vyasaa.com" },
 };

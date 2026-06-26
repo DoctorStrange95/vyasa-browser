@@ -16,6 +16,10 @@ export const metadata: Metadata = {
     "NFHS-6 caesarean section", "NFHS-6 diabetes obesity", "NFHS-6 release date", "NFHS-6 sample size",
     "NFHS-6 state fact sheet", "IIPS NFHS-6", "MoHFW NFHS-6", "SRS 2023 India IMR",
     "India fertility rate 2023-24", "India health survey 2024 results",
+    "NFHS-6 anaemia women children", "NFHS-6 antenatal care", "NFHS-6 contraceptive use",
+    "NFHS-6 hypertension blood pressure", "NFHS-6 high blood sugar diabetes", "NFHS-6 overweight obesity BMI",
+    "NFHS-6 child marriage", "NFHS-6 women empowerment", "NFHS-6 exclusive breastfeeding",
+    "NFHS-6 neonatal under-5 mortality", "NFHS-6 crude birth death rate", "NFHS-6 vs NFHS-5 change India",
   ],
   alternates: { canonical: URL },
   openGraph: {
