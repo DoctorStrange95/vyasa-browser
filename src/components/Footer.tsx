@@ -86,11 +86,11 @@ export default function Footer() {
         {/* Bottom bar */}
         <div style={{ borderTop: "1px solid #1e3a5f", paddingTop: "1.5rem", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "0.75rem" }}>
           <p style={{ fontSize: "0.78rem", color: "#475569" }}>
-            © 2025 Vyasa Integrated Healthcare Pvt. Ltd. Data sourced from NHP, NFHS-6, IDSP, PMJAY, CPCB. For reference only.
+            © 2026 Vyasa Integrated Healthcare Pvt. Ltd. Data sourced from NHP, NFHS-6, IDSP, PMJAY, CPCB. For reference only.
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <p className="font-data" style={{ fontSize: "0.72rem", color: "#334155" }}>
-              v2.1.0 · Updated April 2025
+              v2.2.0 · Updated June 2026
             </p>
             <Link href="/cookies" style={{ fontSize: "0.72rem", color: "#334155", textDecoration: "underline" }}>Cookie Settings</Link>
           </div>
