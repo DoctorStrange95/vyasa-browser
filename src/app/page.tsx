@@ -443,13 +443,13 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", alignItems: "center", flexShrink: 0 }}>
-                  <Link href="/join" style={{
+                  <a href="https://app.vyasaa.com/register" target="_blank" rel="noopener noreferrer" style={{
                     backgroundColor: "#0d9488", color: "#fff", padding: "0.9rem 2rem",
                     borderRadius: "10px", textDecoration: "none", fontSize: "0.95rem", fontWeight: 700,
                     display: "block", textAlign: "center",
                   }}>
-                    Request Early Access →
-                  </Link>
+                    Sign up →
+                  </a>
                   <span style={{ fontSize: "0.68rem", color: "#475569" }}>Doctors · Hospitals · Labs · Pharmacies</span>
                 </div>
               </div>

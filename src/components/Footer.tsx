@@ -51,7 +51,7 @@ export default function Footer() {
               <Link href="/citizens"  style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Citizens Centre</Link>
               <Link href="/sources"   style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Data Sources</Link>
               <Link href="/team"      style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Our Team</Link>
-              <Link href="/join"      style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Join Vyasa</Link>
+              <a href="https://app.vyasaa.com/register" target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.875rem" }}>Sign up</a>
             </div>
           </div>
 

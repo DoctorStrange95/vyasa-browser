@@ -335,13 +335,15 @@ export default function GlobalSidebar({ user, uiConfig }: { user?: HeaderUser | 
             </Link>
           )}
           {showJoinProfessional && (
-            <Link
-              href="/join#join-form"
+            <a
+              href="https://app.vyasaa.com/register"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
               style={{ display: "block", textAlign: "center", backgroundColor: "transparent", border: "1px solid #1e3a5f", color: "#475569", padding: "0.5rem 1rem", borderRadius: "8px", textDecoration: "none", fontSize: "0.75rem", fontWeight: 500 }}
             >
-              Join as Professional (Doctors)
-            </Link>
+              Sign up (Doctors)
+            </a>
           )}
           <div style={{ fontSize: "0.56rem", color: "#1e3a5f", lineHeight: 1.5, marginTop: "0.65rem", textAlign: "center" }}>
             IDSP · NFHS-6 · SRS 2023 · MoHFW
