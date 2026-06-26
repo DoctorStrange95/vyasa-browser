@@ -12,6 +12,7 @@ import FeedbackWidget from "@/components/FeedbackWidget";
 import { getUserSession } from "@/lib/userAuth";
 import PageTracker from "@/components/PageTracker";
 import PWASetup from "@/components/PWASetup";
+import ScrollReveal from "@/components/ScrollReveal";
 import { getSiteConfig } from "@/lib/siteConfig";
 
 const BASE_URL = "https://www.vyasaa.com";
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
     default: "India's Public Health Transparency Platform",
-    template: "%s | Vyasa",
+    template: "%s | Vyasa Integrated Healthcare",
   },
   description:
     "District-level public health data for every Indian state and UT — infant mortality, vaccination coverage, disease outbreaks, hospital infrastructure, nutrition and air quality. Powered by NFHS-6, SRS 2023, IDSP and MoHFW.",
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: BASE_URL,
-    siteName: "Vyasa — India's Public Health Transparency Platform",
+    siteName: "Vyasa Integrated Healthcare",
     title: "India's Public Health Transparency Platform",
     description:
       "Real-time district-level health data across 36 states and UTs. IMR, vaccination, disease outbreaks, hospital beds, air quality — all in one place.",
@@ -88,8 +89,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            "name": "Vyasa",
-            "alternateName": "India's Public Health Transparency Platform",
+            "name": "Vyasa Integrated Healthcare",
+            "alternateName": ["Vyasa", "India's Public Health Transparency Platform"],
             "url": BASE_URL,
             "description": "India's largest open public health data platform — district-level IMR, vaccination, disease outbreaks, hospital infrastructure across 36 states and 700+ districts.",
             "potentialAction": {
@@ -99,9 +100,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             },
             "publisher": {
               "@type": "Organization",
-              "name": "Vyasa Health",
+              "name": "Vyasa Integrated Healthcare Pvt. Ltd.",
+              "alternateName": "Vyasa Integrated Healthcare",
               "url": BASE_URL,
-              "logo": { "@type": "ImageObject", "url": `${BASE_URL}/icons/icon.svg` },
+              "logo": { "@type": "ImageObject", "url": "https://health.vyasaa.com/icons/icon.svg", "width": 512, "height": 512 },
             },
           }) }}
         />
@@ -126,6 +128,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </div>
         <PageTracker />
+        <ScrollReveal />
         <PWASetup />
         <FeedbackButton />
         <FacilityDrawer />
