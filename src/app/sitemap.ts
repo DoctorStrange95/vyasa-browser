@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE,                   lastModified: now, changeFrequency: "daily",   priority: 1.0 },
     { url: `${BASE}/citizens`,     lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
+    { url: "https://health.vyasaa.com/nfhs-6", lastModified: now, changeFrequency: "monthly", priority: 0.95 },
     { url: `${BASE}/sources`,      lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/join`,         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/contribute`,   lastModified: now, changeFrequency: "monthly", priority: 0.6 },

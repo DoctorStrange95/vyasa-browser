@@ -63,7 +63,10 @@ export default function SourcesPage() {
         </p>
         <p style={{ fontSize: "0.85rem", color: "#475569", marginTop: "0.75rem" }}>
           The data shown is representative of years 2021–2023 depending on availability.
-          NFHS-5 data covers 2019–21. AQI data is updated annually.
+          NFHS-5 data covers 2019–21. AQI data is updated annually. See our full{" "}
+          <a href="/nfhs-6" style={{ color: "#2dd4bf", textDecoration: "underline" }}>
+            NFHS-6 (2023-24) key-indicator analysis and NFHS-5 comparison
+          </a>.
         </p>
       </div>
     </div>
