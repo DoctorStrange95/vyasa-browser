@@ -124,7 +124,7 @@ export default function Header({ user, uiConfig }: { user?: HeaderUser | null; u
             </a>
           )}
 
-          {user ? (
+          {user && (
             <Link
               href="/profile"
               style={{ display: "flex", alignItems: "center", gap: "0.5rem", backgroundColor: "#0f2040", border: "1px solid #1e3a5f", color: "#94a3b8", padding: "0.55rem 0.9rem", borderRadius: "6px", textDecoration: "none", fontSize: "0.875rem", fontWeight: 600, minHeight: "44px" }}
@@ -133,13 +133,6 @@ export default function Header({ user, uiConfig }: { user?: HeaderUser | null; u
                 {user.name[0].toUpperCase()}
               </span>
               <span className="header-username">{user.name.split(" ")[0]}</span>
-            </Link>
-          ) : (
-            <Link
-              href="/auth"
-              style={{ backgroundColor: "#0d9488", color: "#fff", padding: "0.6rem 1.25rem", borderRadius: "6px", textDecoration: "none", fontSize: "0.9rem", fontWeight: 700, minHeight: "44px", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
-            >
-              Sign In →
             </Link>
           )}
         </div>
@@ -241,12 +234,24 @@ export default function Header({ user, uiConfig }: { user?: HeaderUser | null; u
       )}
 
       <style>{`
+        .header-join-btn {
+          transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+        .header-join-btn:hover {
+          transform: translateY(-1px);
+          background-color: #10a89b !important;
+          box-shadow: 0 6px 18px -6px rgba(13, 148, 136, 0.7);
+        }
+        .header-join-btn:active { transform: translateY(0) scale(0.98); }
         @media (max-width: 900px) {
           .header-join-btn { display: none !important; }
           .header-username { display: none; }
         }
         @media (max-width: 480px) {
           .header-search-label { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .header-join-btn, .header-join-btn:hover, .header-join-btn:active { transform: none; transition: none; }
         }
       `}</style>
     </header>
