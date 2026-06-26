@@ -249,9 +249,12 @@ export default function HomePage() {
           {/* ── ALL STATES TABLE ────────────────────────────────── */}
           <section id="sec-states" className="home-section" style={{ borderBottom: "1px solid #1e3a5f" }}>
             <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "2rem 1.5rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
+              <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.6rem", marginBottom: "1.25rem" }}>
                 <span style={{ fontSize: "1rem" }}>📋</span>
                 <h2 className="font-display" style={{ fontSize: "1.3rem", fontWeight: 700, color: "#fff" }}>All States & Union Territories</h2>
+                <a href="/states" style={{ marginLeft: "auto", fontSize: "0.8rem", fontWeight: 700, color: "#2dd4bf", textDecoration: "none", border: "1px solid #0d948855", borderRadius: 8, padding: "0.4rem 0.8rem", whiteSpace: "nowrap" }}>
+                  NFHS-5 vs NFHS-6 comparison →
+                </a>
               </div>
               <StateTable states={states} />
             </div>
