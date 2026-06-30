@@ -81,6 +81,7 @@ export default function PrivacyPage() {
             <li><strong style={{ color: "#e2e8f0" }}>Nominatim (OpenStreetMap)</strong> — used for reverse geocoding GPS coordinates. No personal data is stored by Nominatim.</li>
             <li><strong style={{ color: "#e2e8f0" }}>Vercel</strong> — hosting provider. Edge logs are subject to Vercel&apos;s privacy policy.</li>
             <li><strong style={{ color: "#e2e8f0" }}>Firebase / Google Cloud</strong> — database and authentication infrastructure.</li>
+            <li><strong style={{ color: "#e2e8f0" }}>Google AdSense</strong> — we display advertising on our public pages. Google and its partners use cookies and similar technologies to serve ads based on your prior visits to this and other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to you based on your visit to our sites and/or other sites on the Internet. You may opt out of personalised advertising by visiting <a href="https://www.google.com/settings/ads" style={{ color: "#60a5fa" }} target="_blank" rel="noopener noreferrer">Google Ads Settings</a>, or opt out of third-party vendor cookies via <a href="https://www.aboutads.info/choices/" style={{ color: "#60a5fa" }} target="_blank" rel="noopener noreferrer">aboutads.info/choices</a>. We do not share your health locker or patient data with advertisers.</li>
           </ul>
         </Section>
 
