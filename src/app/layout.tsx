@@ -119,6 +119,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta name="apple-mobile-web-app-title" content="Vyasa" />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="/icons/icon.svg" />
+        {/* Google AdSense — site verification (ca-pub-1178392647946498) */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1178392647946498"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
         <Header user={session} uiConfig={uiConfig} />
